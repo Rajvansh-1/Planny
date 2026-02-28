@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Nunito } from 'next/font/google';
 import './globals.css';
+import { Providers } from '@/components/Providers';
 
 const nunito = Nunito({
   subsets: ['latin'],
@@ -17,9 +18,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={nunito.className}>
-        <div className="blob-shape blob-1"></div>
-        <div className="blob-shape blob-2"></div>
-        {children}
+        <Providers>
+          <div className="blob-shape blob-1"></div>
+          <div className="blob-shape blob-2"></div>
+          {children}
+        </Providers>
       </body>
     </html>
   );
