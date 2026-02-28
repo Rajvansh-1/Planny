@@ -17,6 +17,9 @@ model User {
   image         String?
   timezone      String    @default("UTC")
   createdAt     DateTime  @default(now())
+  isPaid        Boolean   @default(false)
+  paidAt        DateTime?
+  razorpayOrderId String?
   
   accounts      Account[]
   sessions      Session[]

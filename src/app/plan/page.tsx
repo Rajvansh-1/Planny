@@ -34,9 +34,19 @@ function PlanForm() {
   useEffect(() => {
     if (!email) { router.push('/'); return; }
 
-    async function fetchTasks() {
+    async function checkStatusAndFetchTasks() {
       setLoading(true);
       try {
+        // 1. Check if user is paid
+        const statusRes = await fetch(`/api/user/status?email=${encodeURIComponent(email!)}`);
+        const statusData = await statusRes.json();
+
+        if (!statusData.isPaid) {
+          router.push(`/payment?email=${encodeURIComponent(email!)}`);
+          return;
+        }
+
+        // 2. Fetch tasks
         const res = await fetch(`/api/tasks?email=${encodeURIComponent(email!)}&dateFor=${tomorrowStr}`);
         const data = await res.json();
         if (data.tasks) {
@@ -53,8 +63,8 @@ function PlanForm() {
         setLoading(false);
       }
     }
-    fetchTasks();
-  }, [email]);
+    checkStatusAndFetchTasks();
+  }, [email, router, tomorrowStr]);
 
   const addTask = async (e: React.FormEvent) => {
     e.preventDefault();

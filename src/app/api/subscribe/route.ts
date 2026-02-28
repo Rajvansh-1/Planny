@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { sendEmail } from '@/lib/email';
+import { isAdmin } from '@/lib/isAdmin';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,7 +14,7 @@ export async function POST(req: Request) {
 
     if (!email) return NextResponse.json({ error: 'Email required' }, { status: 400 });
 
-    // Check if user already exists before upsert
+    // Check if user already exists
     const existing = await prisma.user.findUnique({ where: { email } });
 
     const user = await prisma.user.upsert({
@@ -57,7 +58,8 @@ export async function POST(req: Request) {
       });
     }
 
-    return NextResponse.json({ success: true, user, isNew: !existing });
+    // @ts-ignore
+    return NextResponse.json({ success: true, user, isNew: !existing, isPaid: user.isPaid || isAdmin(email) });
   } catch (error) {
     console.error('Subscribe error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

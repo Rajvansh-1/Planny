@@ -31,7 +31,12 @@ export default function Home() {
       });
       const data = await res.json();
       if (res.ok) {
-        setSuccess(true);
+        if (!data.isPaid) {
+          // Redirect to payment if not paid
+          router.push(`/payment?email=${encodeURIComponent(email)}`);
+        } else {
+          setSuccess(true);
+        }
       } else {
         setError(data.error || 'Something went wrong. Please try again.');
       }
@@ -67,6 +72,7 @@ export default function Home() {
                 Welcome back, {session.user?.name?.split(' ')[0]}! ✨
               </h2>
             </div>
+            {/* When Google logged in goes to planner, check payment on the server via /plan page loading... */}
             <button onClick={() => router.push('/calendar')} className="btn" style={{ width: '100%', fontSize: '1rem', display: 'flex', justifyContent: 'center', gap: '8px', alignItems: 'center' }}>
               <CalendarDays size={18} /> Open My Calendar
             </button>
@@ -148,6 +154,15 @@ export default function Home() {
             <p style={{ fontSize: '0.85rem', color: '#6b7280', margin: 0 }}>Wake up to your tasks + an AI quote.</p>
           </div>
         </div>
+
+        {/* Pricing tag */}
+        {!session && !success && (
+          <div style={{ marginTop: '32px', textAlign: 'center' }}>
+            <p style={{ display: 'inline-block', background: 'rgba(255,255,255,0.6)', padding: '6px 16px', borderRadius: '20px', color: '#4b5563', fontSize: '14px', fontWeight: '500', border: '1px solid rgba(249,168,212,0.3)' }}>
+              Get Planny Pro for just <span style={{ color: '#db2777', fontWeight: 'bold' }}>₹19/month</span> 🌸
+            </p>
+          </div>
+        )}
       </div>
     </main>
   );

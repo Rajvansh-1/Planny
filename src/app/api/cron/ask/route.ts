@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { sendEmail } from '@/lib/email';
+import { isAdmin } from '@/lib/isAdmin';
 
 export const dynamic = 'force-dynamic';
 
@@ -8,8 +9,10 @@ const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000').r
 
 export async function GET() {
   try {
+    // @ts-ignore
     const users = await prisma.user.findMany({
-      select: { id: true, email: true, name: true }
+      // @ts-ignore
+      select: { id: true, email: true, name: true, isPaid: true }
     });
 
     // Today's date – show what they completed today
@@ -18,7 +21,11 @@ export async function GET() {
     let sent = 0;
     const errors: string[] = [];
 
-    for (const user of users) {
+    // Filter to only paid users or admins
+    // @ts-ignore
+    const eligibleUsers = users.filter(u => u.isPaid || isAdmin(u.email));
+
+    for (const user of eligibleUsers) {
       const todayTasks = await prisma.task.findMany({
         where: { userId: user.id, dateFor: today },
         orderBy: { createdAt: 'asc' },
