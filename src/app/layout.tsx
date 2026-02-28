@@ -11,7 +11,12 @@ const nunito = Nunito({
 
 export const metadata: Metadata = {
   title: 'Planny 🐾 | Your Cute AI Scheduler',
-  description: 'A cute AI automation tool to plan your day.',
+  description: 'An AI automation tool to plan your day.',
+  icons: {
+    icon: '/planny-logo.png',
+    shortcut: '/planny-logo.png',
+    apple: '/planny-logo.png',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

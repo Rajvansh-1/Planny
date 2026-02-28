@@ -1,19 +1,19 @@
 <div align="center">
 
-<img src="public/favicon.ico" width="80" alt="Planny Logo" />
+<img src="public/planny-logo.png" width="300" alt="Planny Logo" />
 
-# 🐾 Planny
+# Planny
 
 **Your cute, magical AI productivity assistant.**  
 Planny checks in every night to learn your goals — and delivers a personalized, motivational plan to your inbox every morning.
 
-[![Live App](https://img.shields.io/badge/Live%20App-planny.app-f9a8d4?style=for-the-badge&logo=vercel&logoColor=white)](https://planny.vercel.app)
+[![Live App](https://img.shields.io/badge/Live%20App-planny.app-f9a8d4?style=for-the-badge&logo=vercel&logoColor=white)](https://planny-mu.vercel.app)
 [![Built with Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
 [![Powered by Groq AI](https://img.shields.io/badge/AI-Groq-orange?style=for-the-badge)](https://groq.com)
 
 </div>
-
 ---
+
 
 ## ✨ What is Planny?
 
