@@ -14,9 +14,9 @@ export const metadata: Metadata = {
   description: 'An AI automation tool to plan your day.',
   icons: {
     icon: [
-      { url: '/icon.png', type: 'image/png' },
+      { url: '/apple-icon.png', type: 'image/png' },
     ],
-    shortcut: '/icon.png',
+    shortcut: '/apple-icon.png',
     apple: '/apple-icon.png',
   },
 };

@@ -40,8 +40,12 @@ export default function Home() {
   return (
     <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
       <div className="glass-panel fade-up" style={{ maxWidth: '600px', width: '100%', textAlign: 'center' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '80px', height: '80px', borderRadius: '24px', marginBottom: '20px', boxShadow: '0 8px 20px rgba(249, 168, 212, 0.4)', overflow: 'hidden' }}>
-          <img src="/icon.png" alt="Planny Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
+          <img
+            src="/planny-logo.png"
+            alt="Planny"
+            style={{ width: '120px', height: '120px', objectFit: 'contain', filter: 'drop-shadow(0 8px 20px rgba(249, 168, 212, 0.5))' }}
+          />
         </div>
 
         <h1 style={{ fontSize: '2.5rem', color: '#1f2937', marginBottom: '10px' }}>Meet Planny 🐾</h1>
