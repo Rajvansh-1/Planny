@@ -87,7 +87,7 @@ User signs in → adds tasks for tomorrow
 - 🚫 **Do not clone, fork, or copy** this repository or any part of its source code.
 - 🚫 **Do not redistribute** or republish any portion of this codebase.
 - 🚫 **Do not use** this code to build competing or derivative products.
-- ✅ **Personal use** of the live app at [planny.vercel.app](https://planny.vercel.app) is subject to our Terms of Service.
+- ✅ **Personal use** of the live app at [planny.vercel.app](https://planny-mu.vercel.app/) is subject to our Terms of Service.
 
 All rights reserved © 2026 Planny. Unauthorized use, reproduction, or distribution of this software is strictly prohibited.
 
@@ -97,7 +97,7 @@ All rights reserved © 2026 Planny. Unauthorized use, reproduction, or distribut
 
 Have questions, feedback, or partnership inquiries?
 
-- **Email:** [hello@planny.app](mailto:hello@planny.app)
+
 - **Live App:** [planny.vercel.app](https://planny-mu.vercel.app/)
 
 ---
