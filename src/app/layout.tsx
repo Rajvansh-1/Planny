@@ -13,9 +13,11 @@ export const metadata: Metadata = {
   title: 'Planny 🐾 | Your Cute AI Scheduler',
   description: 'An AI automation tool to plan your day.',
   icons: {
-    icon: '/planny-logo.png',
-    shortcut: '/planny-logo.png',
-    apple: '/planny-logo.png',
+    icon: [
+      { url: '/icon.png', type: 'image/png' },
+    ],
+    shortcut: '/icon.png',
+    apple: '/apple-icon.png',
   },
 };
 
