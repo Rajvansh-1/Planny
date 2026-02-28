@@ -27,7 +27,7 @@ export default async function CalendarPage() {
   }
 
   // Need to pass clean plain objects to Client Components
-  const safeTasks = user.tasks.map(t => ({
+  const safeTasks = user.tasks.map((t: any) => ({
     id: t.id,
     content: t.content,
     dateFor: t.dateFor,
