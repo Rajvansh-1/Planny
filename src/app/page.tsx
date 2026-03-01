@@ -21,7 +21,7 @@ export default function Home() {
     setError('');
 
     try {
-      const res = await signIn('email', { email, redirect: false, callbackUrl: '/calendar' });
+      const res = await signIn('email', { email, redirect: false, callbackUrl: '/dashboard' });
       if (res?.error) {
         setError("Could not send magic link. Please try again.");
       } else {
@@ -92,10 +92,9 @@ export default function Home() {
           </div>
 
         ) : (
-          /* ─── SIGNUP STATE ─── */
           <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
             <button
-              onClick={() => signIn('google', { callbackUrl: '/calendar' })}
+              onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
               style={{ width: '100%', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: 'white', color: '#374151', border: '1.5px solid #e5e7eb', borderRadius: '14px', padding: '14px 20px', cursor: 'pointer', fontWeight: '600', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', marginBottom: '20px', transition: 'all 0.2s', letterSpacing: '-0.01em' }}
               onMouseOver={e => { e.currentTarget.style.boxShadow = '0 6px 16px rgba(0,0,0,0.08)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
               onMouseOut={e => { e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)'; e.currentTarget.style.transform = 'translateY(0)'; }}
@@ -176,6 +175,6 @@ export default function Home() {
           100% { opacity: 0.6; transform: scale(0.95); }
         }
       `}</style>
-    </main>
+    </main >
   );
 }

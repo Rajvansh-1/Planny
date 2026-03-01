@@ -54,9 +54,9 @@ export default function CalendarClient({ tasks }: { tasks: Task[] }) {
         {/* Navigation Bar */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
           <button
-            onClick={() => router.push('/')}
+            onClick={() => router.push('/dashboard')}
             style={{ background: 'white', border: '1px solid #f9a8d4', borderRadius: '50%', width: '44px', height: '44px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6b7280', fontWeight: 'bold', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', transition: 'all 0.2s', flexShrink: 0 }}
-            title="Go Home"
+            title="Go to Dashboard"
           >
             <ArrowLeft size={20} />
           </button>
@@ -149,11 +149,35 @@ export default function CalendarClient({ tasks }: { tasks: Task[] }) {
               ) : (
                 selectedTasks.map(task => (
                   <div key={task.id} style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', background: 'white', padding: '18px', borderRadius: '16px', borderLeft: `5px solid ${task.completed ? '#34d399' : '#fbcfe8'}`, boxShadow: '0 4px 12px rgba(0,0,0,0.03)', transition: 'transform 0.2s', animation: 'fadeIn 0.4s ease-out forwards' }}>
-                    {task.completed ? (
-                      <CheckCircle2 size={24} color="#34d399" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    ) : (
-                      <Circle size={24} color="#d1d5db" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    )}
+
+                    {/* Interactive Checkbox */}
+                    <button
+                      onClick={async () => {
+                        // Immediately toggle locally (for visual feedback)
+                        const newCompleted = !task.completed;
+                        task.completed = newCompleted;
+                        // Note: For a true instant update we should use state, but since these are passed via props, 
+                        // we force a hard refresh via router.refresh() after the API call finishes.
+                        const btn = document.getElementById(`task-btn-${task.id}`);
+                        if (btn) btn.innerHTML = newCompleted ? '✅' : '⭕';
+
+                        await fetch('/api/tasks', {
+                          method: 'PATCH',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ taskId: task.id, completed: newCompleted }),
+                        });
+                        router.refresh();
+                      }}
+                      id={`task-btn-${task.id}`}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0', flexShrink: 0, marginTop: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                      {task.completed ? (
+                        <CheckCircle2 size={24} color="#34d399" />
+                      ) : (
+                        <Circle size={24} color="#d1d5db" />
+                      )}
+                    </button>
+
                     <span style={{ color: task.completed ? '#9ca3af' : '#374151', textDecoration: task.completed ? 'line-through' : 'none', lineHeight: '1.5', fontSize: '16px', fontWeight: '500' }}>
                       {task.content}
                     </span>

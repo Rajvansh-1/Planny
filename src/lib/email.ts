@@ -12,8 +12,11 @@ export const transporter = nodemailer.createTransport({
 
 export const sendEmail = async ({ to, subject, html }: { to: string; subject: string; html: string }) => {
   try {
+    // Force using SMTP_USER as sender to prevent Google DMARC rejections
+    const sender = process.env.SMTP_USER ? `"Planny 🐾" <${process.env.SMTP_USER}>` : '"Planny 🐾" <hello@planny.app>';
+
     const info = await transporter.sendMail({
-      from: process.env.EMAIL_FROM || '"Planny 🐾" <hello@planny.app>',
+      from: sender,
       to,
       subject,
       html,

@@ -83,7 +83,7 @@ function PlanForm() {
       });
       const data = await res.json();
       if (data.task) {
-        setTasks(prev => prev.map(t => t.id === optimisticId ? { ...t, id: data.task.id, isSaving: false } : t));
+        setTasks(prev => prev.map(t => t.id === optimisticId ? { ...t, id: data.task.id, isSaving: false, isNew: false } : t));
       }
     } catch (e) {
       console.error(e);
@@ -142,7 +142,7 @@ function PlanForm() {
       <div className="glass-panel" style={{ maxWidth: '600px', width: '100%', flex: 1, display: 'flex', flexDirection: 'column', animation: 'fadeInUp 0.6s ease-out', position: 'relative', marginTop: '1rem', padding: '24px' }}>
 
         {/* Navigation / Back Button */}
-        <button onClick={() => router.push('/')} style={{ position: 'absolute', top: '24px', left: '24px', background: 'rgba(255,255,255,0.6)', border: '1px solid rgba(249,168,212,0.5)', borderRadius: '50%', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#6b7280', transition: 'all 0.2s', zIndex: 10 }}>
+        <button onClick={() => router.push('/dashboard')} style={{ position: 'absolute', top: '24px', left: '24px', background: 'rgba(255,255,255,0.6)', border: '1px solid rgba(249,168,212,0.5)', borderRadius: '50%', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#6b7280', transition: 'all 0.2s', zIndex: 10 }}>
           ←
         </button>
 

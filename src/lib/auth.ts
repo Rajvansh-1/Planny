@@ -50,7 +50,7 @@ export const authOptions: NextAuthOptions = {
           pass: process.env.SMTP_PASS,
         },
       },
-      from: process.env.EMAIL_FROM || '"Planny 🐾" <hello@planny.app>',
+      from: process.env.SMTP_USER ? `"Planny 🐾" <${process.env.SMTP_USER}>` : '"Planny 🐾" <hello@planny.app>',
       sendVerificationRequest: async ({ identifier: email, url, provider: { server, from } }) => {
         const result = await sendEmail({
           to: email,
