@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { transporter } from '@/lib/email';
+import { generateMorningQuote } from '@/lib/ai';
 
 export const dynamic = 'force-dynamic';
 
@@ -7,6 +8,16 @@ export async function GET() {
   try {
     const testTo = 'cartoonworldd24x7@gmail.com'; // Admin email to receive test
 
+    // 1. Test Groq Connection
+    let aiQuote = "Not Generated";
+    let aiError = null;
+    try {
+      aiQuote = await generateMorningQuote();
+    } catch (e: any) {
+      aiError = e.message;
+    }
+
+    // 2. Test SMTP Connection
     const info = await transporter.sendMail({
       from: process.env.EMAIL_FROM || '"Planny 🐾" <hello@planny.app>',
       to: testTo,
@@ -17,6 +28,11 @@ export async function GET() {
     return NextResponse.json({
       success: true,
       messageId: info.messageId,
+      aiTest: {
+        quoteGenerated: aiQuote,
+        error: aiError,
+        groqKeyConfigured: !!process.env.GROQ_API_KEY
+      },
       env: {
         SMTP_HOST: process.env.SMTP_HOST || 'Not Set',
         SMTP_PORT: process.env.SMTP_PORT || 'Not Set',

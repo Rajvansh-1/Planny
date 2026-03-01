@@ -24,8 +24,8 @@ export const generateMorningQuote = async (): Promise<string> => {
     });
 
     return completion.choices[0]?.message?.content || "Good morning! Let's get things done today! 🐾✨";
-  } catch (error) {
+  } catch (error: any) {
     console.error("Groq generation error:", error);
-    return "Good morning! Let's get things done today! 🐾✨";
+    return `AI Error: ${error?.message || error}`;
   }
 };
