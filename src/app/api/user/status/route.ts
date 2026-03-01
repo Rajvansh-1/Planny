@@ -26,7 +26,7 @@ export async function GET(req: Request) {
     const isWithinFreeTrial = user.createdAt > oneDayAgo;
 
     return NextResponse.json({
-      isPaid: user.isPaid || isAdmin(email) || isWithinFreeTrial
+      isPaid: true // Beta version: Free for everyone for 20 days
     });
   } catch (error) {
     console.error(error);
