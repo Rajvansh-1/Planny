@@ -70,7 +70,7 @@ export async function GET() {
                 
                 <div style="background: white; padding: 24px; border: 1px solid #f0f0f0;">
                   <div style="background: linear-gradient(135deg, #FFF0F5, #f3e8ff); border-radius: 12px; padding: 20px; margin-bottom: 24px; text-align: center; border-left: 4px solid #FFB6C1;">
-                    <p style="color: #555; font-size: 18px; font-style: italic; margin: 0; line-height: 1.5;">"${aiQuote}"</p>
+                    <p style="color: #555; font-size: 18px; font-style: italic; margin: 0; line-height: 1.5;">${aiQuote}</p>
                   </div>
                   
                   <h2 style="color: #333; font-size: 20px; margin: 0 0 16px;">📋 Your tasks for today:</h2>
