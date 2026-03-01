@@ -42,7 +42,9 @@ export default function Home() {
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
           <img src="/planny-logo.png" alt="Planny" style={{ width: '130px', height: '130px', objectFit: 'contain', filter: 'drop-shadow(0 6px 16px rgba(249,168,212,0.6))', animation: 'float 3s ease-in-out infinite' }} />
         </div>
-        <h1 style={{ fontSize: '2.4rem', color: '#1f2937', marginBottom: '8px', letterSpacing: '-0.02em' }}>Meet Planny 🐾</h1>
+        <h1 style={{ fontSize: '2.4rem', color: '#1f2937', marginBottom: '8px', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+          Meet Planny <span style={{ fontSize: '14px', background: 'linear-gradient(135deg, #FFB6C1, #f9a8d4)', color: 'white', padding: '4px 10px', borderRadius: '20px', letterSpacing: '0.05em', fontWeight: 'bold', textTransform: 'uppercase', verticalAlign: 'middle' }}>Beta</span> 🐾
+        </h1>
         <p style={{ fontSize: '1rem', color: '#6b7280', marginBottom: '28px', lineHeight: '1.5' }}>
           Your daily AI planner. Get a <strong>10 PM check-in</strong> and a <strong>7 AM digest</strong> straight to your inbox. No app needed.
         </p>
@@ -145,7 +147,7 @@ export default function Home() {
         {!session && !success && (
           <div style={{ marginTop: '32px', textAlign: 'center' }}>
             <p style={{ display: 'inline-block', background: 'rgba(255,255,255,0.6)', padding: '6px 16px', borderRadius: '20px', color: '#4b5563', fontSize: '14px', fontWeight: '500', border: '1px solid rgba(249,168,212,0.3)', boxShadow: '0 2px 10px rgba(0,0,0,0.02)' }}>
-              1 Day Free Trial • Then just <span style={{ color: '#db2777', fontWeight: 'bold' }}>₹19/mo</span> 🌸
+              20 Days Free Trial • Then just <span style={{ color: '#db2777', fontWeight: 'bold' }}>₹19/month</span> 🌸
             </p>
           </div>
         )}
