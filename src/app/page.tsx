@@ -40,7 +40,7 @@ export default function Home() {
 
         {/* Logo */}
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
-          <img src="/planny-logo.png" alt="Planny" style={{ width: '90px', height: '90px', objectFit: 'contain', filter: 'drop-shadow(0 6px 16px rgba(249,168,212,0.6))', animation: 'float 3s ease-in-out infinite' }} />
+          <img src="/planny-logo.png" alt="Planny" style={{ width: '130px', height: '130px', objectFit: 'contain', filter: 'drop-shadow(0 6px 16px rgba(249,168,212,0.6))', animation: 'float 3s ease-in-out infinite' }} />
         </div>
         <h1 style={{ fontSize: '2.4rem', color: '#1f2937', marginBottom: '8px', letterSpacing: '-0.02em' }}>Meet Planny 🐾</h1>
         <p style={{ fontSize: '1rem', color: '#6b7280', marginBottom: '28px', lineHeight: '1.5' }}>

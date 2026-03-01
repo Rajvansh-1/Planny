@@ -114,7 +114,7 @@ function PaymentContent() {
     <main style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
       <div className="glass-panel fade-up" style={{ maxWidth: '450px', width: '100%', textAlign: 'center' }}>
 
-        <img src="/planny-logo.png" alt="Planny" style={{ width: '80px', height: '80px', marginBottom: '16px', filter: 'drop-shadow(0 4px 12px rgba(249,168,212,0.4))' }} />
+        <img src="/planny-logo.png" alt="Planny" style={{ width: '110px', height: '110px', marginBottom: '16px', filter: 'drop-shadow(0 4px 12px rgba(249,168,212,0.4))' }} />
 
         <h1 style={{ fontSize: '2rem', color: '#1f2937', marginBottom: '8px' }}>Planny Pro 🐾</h1>
         <p style={{ color: '#6b7280', marginBottom: '24px' }}>

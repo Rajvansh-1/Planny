@@ -148,7 +148,7 @@ function PlanForm() {
 
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '28px', marginTop: '8px' }}>
-          <img src="/planny-logo.png" alt="Planny" style={{ width: '72px', height: '72px', objectFit: 'contain', filter: 'drop-shadow(0 6px 14px rgba(249,168,212,0.4))', marginBottom: '12px', animation: 'float 3s ease-in-out infinite' }} />
+          <img src="/planny-logo.png" alt="Planny" style={{ width: '96px', height: '96px', objectFit: 'contain', filter: 'drop-shadow(0 6px 14px rgba(249,168,212,0.4))', marginBottom: '12px', animation: 'float 3s ease-in-out infinite' }} />
           <h1 style={{ fontSize: '2rem', color: '#1f2937', margin: '0 0 6px', letterSpacing: '-0.02em', fontWeight: '800' }}>Plan Tomorrow 🌱</h1>
           <p style={{ color: '#6b7280', margin: 0, fontSize: '15px' }}>
             {loading ? 'Waking up your list...' : tasks.length > 0
