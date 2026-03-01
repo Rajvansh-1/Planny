@@ -15,14 +15,18 @@ export async function GET(req: Request) {
     const user = await prisma.user.findUnique({
       where: { email },
       // @ts-ignore
-      select: { isPaid: true }
+      select: { isPaid: true, createdAt: true }
     });
 
     if (!user) return NextResponse.json({ isPaid: false });
 
+    // 1-day free trial logic: if created within last 24 hours, user is implicitly "paid"
+    const oneDayAgo = new Date();
+    oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+    const isWithinFreeTrial = user.createdAt > oneDayAgo;
+
     return NextResponse.json({
-      // @ts-ignore
-      isPaid: user.isPaid || isAdmin(email)
+      isPaid: user.isPaid || isAdmin(email) || isWithinFreeTrial
     });
   } catch (error) {
     console.error(error);

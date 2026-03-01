@@ -28,26 +28,26 @@ export async function GET() {
     // @ts-ignore
     const eligibleUsers = users.filter(u => u.isPaid || isAdmin(u.email));
 
+    // GENERATE AI QUOTE ONCE FOR ALL USERS
+    const aiQuote = await generateMorningQuote();
+
     // Process in parallel batches of 10
     const BATCH_SIZE = 10;
     for (let i = 0; i < eligibleUsers.length; i += BATCH_SIZE) {
       const batch = eligibleUsers.slice(i, i + BATCH_SIZE);
 
-      await Promise.all(batch.map(async (user) => {
+      await Promise.allSettled(batch.map(async (user) => {
         try {
           const tasks = await prisma.task.findMany({
             where: { userId: user.id, dateFor: today },
             orderBy: { createdAt: 'asc' },
           });
 
-          const taskContents = tasks.map((t: { content: string }) => t.content);
-          const aiQuote = await generateMorningQuote(taskContents);
-
           const taskHtml = tasks.length > 0
             ? `<ul style="text-align: left; padding: 0; list-style: none; color: #444; font-size: 16px;">
-                ${tasks.map((t: { content: string }, i: number) => `
+                ${tasks.map((t: { content: string }, idx: number) => `
                   <li style="margin-bottom: 10px; padding: 12px 16px; background: #FFF0F5; border-radius: 8px; border-left: 3px solid #FFB6C1;">
-                    <span style="font-weight: bold; color: #FFB6C1;">${i + 1}.</span> ${t.content}
+                    <span style="font-weight: bold; color: #FFB6C1;">${idx + 1}.</span> ${t.content}
                   </li>
                 `).join('')}
               </ul>`
@@ -56,6 +56,7 @@ export async function GET() {
                </div>`;
 
           const planUrl = `${SITE_URL}/plan?email=${encodeURIComponent(user.email)}`;
+          const firstName = user.name?.split(' ')[0] || 'friend';
 
           const result = await sendEmail({
             to: user.email,
@@ -63,7 +64,7 @@ export async function GET() {
             html: `
               <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                 <div style="background: linear-gradient(135deg, #87CEEB, #98D8FF); padding: 32px; border-radius: 16px 16px 0 0; text-align: center;">
-                  <h1 style="color: white; margin: 0; font-size: 26px;">Good morning, ${user.name?.split(' ')[0] || 'friend'}! ☀️</h1>
+                  <h1 style="color: white; margin: 0; font-size: 26px;">Good morning, ${firstName}! ☀️</h1>
                   <p style="color: rgba(255,255,255,0.9); margin: 8px 0 0; font-size: 14px;">${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
                 </div>
                 
@@ -92,6 +93,11 @@ export async function GET() {
           errors.push(user.email);
         }
       }));
+
+      // Delay slightly between batches
+      if (i + BATCH_SIZE < eligibleUsers.length) {
+        await new Promise(r => setTimeout(r, 500));
+      }
     }
 
     return NextResponse.json({

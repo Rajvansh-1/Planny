@@ -27,8 +27,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true, isPaid: true });
     }
 
-    if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
-      return NextResponse.json({ error: 'Razorpay keys missing' }, { status: 500 });
+    // Disable payments if KYC is pending (keys are placeholders)
+    if (!process.env.RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID.includes('placeholder')) {
+      return NextResponse.json({ error: 'Payments are currently disabled pending verification. Please try again later.' }, { status: 503 });
     }
 
     const razorpay = new Razorpay({

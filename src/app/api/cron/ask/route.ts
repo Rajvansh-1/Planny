@@ -31,7 +31,7 @@ export async function GET() {
     for (let i = 0; i < eligibleUsers.length; i += BATCH_SIZE) {
       const batch = eligibleUsers.slice(i, i + BATCH_SIZE);
 
-      await Promise.all(batch.map(async (user) => {
+      const batchResults = await Promise.allSettled(batch.map(async (user) => {
         try {
           const todayTasks = await prisma.task.findMany({
             where: { userId: user.id, dateFor: today },
@@ -94,6 +94,11 @@ export async function GET() {
           errors.push(user.email);
         }
       }));
+
+      // Allow a small delay between batches
+      if (i + BATCH_SIZE < eligibleUsers.length) {
+        await new Promise(r => setTimeout(r, 500));
+      }
     }
 
     return NextResponse.json({ success: true, sent, total: users.length, errors: errors.length > 0 ? errors : undefined });

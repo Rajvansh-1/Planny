@@ -4,18 +4,17 @@ const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
 });
 
-export const generateMorningQuote = async (tasks: string[]): Promise<string> => {
+export const generateMorningQuote = async (): Promise<string> => {
   try {
-    const tasksString = tasks.length > 0 ? tasks.join(', ') : "No tasks planned yet.";
     const completion = await groq.chat.completions.create({
       messages: [
         {
           role: "system",
-          content: "You are Planny, a cute, highly motivating, and highly productive AI assistant. You generate short, energetic, and cute morning quotes to motivate the user to get their daily tasks done. Use emojis. Keep it under 2 sentences."
+          content: "You are Planny, a cute, highly motivating, and highly productive AI assistant. You generate short, energetic, and cute morning quotes to motivate the user to conquer their day. Use emojis. Keep it under 2 sentences."
         },
         {
           role: "user",
-          content: `My tasks for today: ${tasksString}`
+          content: "Generate a morning motivation quote."
         }
       ],
       model: "llama3-8b-8192",

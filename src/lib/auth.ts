@@ -1,5 +1,6 @@
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import EmailProvider from "next-auth/providers/email";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "@/lib/prisma";
 import { sendEmail } from "@/lib/email";
@@ -39,6 +40,34 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    }),
+    EmailProvider({
+      server: {
+        host: process.env.SMTP_HOST || 'smtp-relay.brevo.com',
+        port: parseInt(process.env.SMTP_PORT || '587'),
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS,
+        },
+      },
+      from: process.env.EMAIL_FROM || '"Planny 🐾" <hello@planny.app>',
+      sendVerificationRequest: async ({ identifier: email, url, provider: { server, from } }) => {
+        const result = await sendEmail({
+          to: email,
+          subject: "Sign in to Planny 🐾",
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; text-align: center; padding: 32px;">
+              <h1 style="color: #333;">Sign in to Planny 🐾</h1>
+              <p style="color: #666; font-size: 16px; margin-bottom: 24px;">Click the button below to sign in implicitly without a password.</p>
+              <a href="${url}" style="background: linear-gradient(135deg, #FFB6C1, #f9a8d4); color: white; padding: 14px 32px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 16px;">
+                Sign In
+              </a>
+              <p style="color: #aaa; font-size: 12px; margin-top: 24px;">If you didn't request this email, you can safely ignore it.</p>
+            </div>
+          `
+        });
+        if (!result) throw new Error("Failed to send verification email");
+      }
     }),
   ],
   session: {
