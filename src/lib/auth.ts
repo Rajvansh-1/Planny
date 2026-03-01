@@ -56,13 +56,25 @@ export const authOptions: NextAuthOptions = {
           to: email,
           subject: "Sign in to Planny 🐾",
           html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; text-align: center; padding: 32px;">
-              <h1 style="color: #333;">Sign in to Planny 🐾</h1>
-              <p style="color: #666; font-size: 16px; margin-bottom: 24px;">Click the button below to sign in implicitly without a password.</p>
-              <a href="${url}" style="background: linear-gradient(135deg, #FFB6C1, #f9a8d4); color: white; padding: 14px 32px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 16px;">
-                Sign In
-              </a>
-              <p style="color: #aaa; font-size: 12px; margin-top: 24px;">If you didn't request this email, you can safely ignore it.</p>
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border-radius: 16px; overflow: hidden; border: 1px solid #f3e8ff;">
+              <div style="background: linear-gradient(135deg, #FFB6C1, #f9a8d4); padding: 40px; text-align: center;">
+                <h1 style="color: white; margin: 0; font-size: 28px;">Welcome to Planny! 🐾</h1>
+                <p style="color: rgba(255,255,255,0.9); margin: 8px 0 0; font-size: 15px;">Your AI-powered daily planner is ready.</p>
+              </div>
+              <div style="background: white; padding: 32px;">
+                <p style="color: #444; font-size: 17px; margin: 0 0 16px;">Here's how Planny works:</p>
+                <div style="border-left: 4px solid #FFB6C1; padding: 16px 20px; background: #FFF0F5; border-radius: 0 10px 10px 0; margin-bottom: 20px;">
+                  <p style="margin: 0 0 10px; color: #333; font-size: 15px;">🌙 <strong>Every night at 10 PM</strong> — You'll get an email showing your day's completed tasks and a link to plan tomorrow (takes 2 min!).</p>
+                  <p style="margin: 0; color: #333; font-size: 15px;">☀️ <strong>Every morning at 7 AM</strong> — You'll wake up to your task list for the day + an AI-generated motivational quote.</p>
+                </div>
+                <p style="color: #555; font-size: 15px;">No app to download. No dashboard. <strong>Everything in your inbox.</strong></p>
+                <div style="text-align: center; margin: 32px 0 24px;">
+                  <a href="${url}" style="display: inline-block; background: linear-gradient(135deg, #FFB6C1, #f9a8d4); color: white; padding: 16px 36px; border-radius: 30px; text-decoration: none; font-weight: bold; font-size: 18px; box-shadow: 0 4px 15px rgba(249,168,212,0.4);">
+                    Log In & Plan My First Day 🌸
+                  </a>
+                </div>
+                <p style="color: #aaa; font-size: 12px; text-align: center; margin: 0;">If you didn't request this email, you can safely ignore it.</p>
+              </div>
             </div>
           `
         });
