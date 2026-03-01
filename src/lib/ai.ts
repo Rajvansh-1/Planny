@@ -17,7 +17,7 @@ export const generateMorningQuote = async (): Promise<string> => {
           content: "Generate a morning motivation quote."
         }
       ],
-      model: "llama3-8b-8192",
+      model: "llama-3.1-8b-instant",
       temperature: 0.7,
       max_completion_tokens: 100,
       top_p: 1,
@@ -26,6 +26,6 @@ export const generateMorningQuote = async (): Promise<string> => {
     return completion.choices[0]?.message?.content || "Good morning! Let's get things done today! 🐾✨";
   } catch (error: any) {
     console.error("Groq generation error:", error);
-    return `AI Error: ${error?.message || error}`;
+    return "Good morning! Let's get things done today! 🐾✨";
   }
 };
