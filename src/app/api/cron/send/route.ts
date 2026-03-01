@@ -24,9 +24,9 @@ export async function GET() {
     let sent = 0;
     const errors: string[] = [];
 
-    // Filter to only paid users or admins
+    // 20-Day Free Beta: All users are eligible
     // @ts-ignore
-    const eligibleUsers = users.filter(u => u.isPaid || isAdmin(u.email));
+    const eligibleUsers = users;
 
     // GENERATE AI QUOTE ONCE FOR ALL USERS
     const aiQuote = await generateMorningQuote();
