@@ -35,23 +35,30 @@ export async function POST(req: Request) {
         to: email,
         subject: 'Welcome to Planny 🐾 – Your daily AI planner is ready!',
         html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #FFF0F5; border-radius: 16px; overflow: hidden;">
-            <div style="background: linear-gradient(135deg, #FFB6C1, #f9a8d4); padding: 40px; text-align: center;">
-              <h1 style="color: white; margin: 0; font-size: 28px;">Welcome to Planny! 🐾</h1>
-              <p style="color: rgba(255,255,255,0.9); margin: 8px 0 0; font-size: 16px;">Your AI-powered daily planner is ready!</p>
+          <div style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #faf5ff; border-radius: 32px; overflow: hidden; border: 1px solid rgba(255,255,255,0.8); box-shadow: 0 12px 30px rgba(45,27,46,0.04), 0 4px 12px rgba(244,114,182,0.1);">
+            <div style="background: linear-gradient(135deg, rgba(233,213,255,0.5), rgba(244,114,182,0.2)); padding: 40px; text-align: center; border-bottom: 1px solid rgba(233,213,255,0.4);">
+              <div style="display: inline-block; background: white; padding: 12px; border-radius: 20px; border: 2px solid rgba(255,255,255,0.8); box-shadow: 0 8px 24px rgba(45,27,46,0.05); margin-bottom: 20px;">
+                <img src="${SITE_URL}/planny-logo.png" alt="Planny" style="width: 48px; height: 48px; object-fit: contain; display: block;" />
+              </div>
+              <h1 style="color: #2d1b2e; margin: 0 0 8px; font-size: 28px; font-weight: 800; letter-spacing: -0.02em;">Welcome to Planny! 🐾</h1>
+              <p style="color: #db2777; margin: 0; font-size: 16px; font-weight: 600;">Your AI-powered daily planner is ready.</p>
             </div>
-            <div style="padding: 32px; background: white;">
-              <p style="color: #444; font-size: 18px;">Hey <strong>${firstName}</strong>! So happy to have you here ✨</p>
-              <p style="color: #555; font-size: 16px; line-height: 1.6;">Here's how Planny works:</p>
-              <div style="border-left: 4px solid #FFB6C1; padding: 16px; margin: 16px 0; background: #FFF0F5; border-radius: 0 8px 8px 0;">
-                <p style="margin: 0 0 10px; color: #333;">🌙 <strong>Every night at 10 PM</strong> – Planny emails you asking what you want to achieve tomorrow.</p>
-                <p style="margin: 0; color: #333;">☀️ <strong>Every morning at 7 AM</strong> – Wake up to your task list + an AI motivational quote, delivered to your inbox.</p>
+            <div style="padding: 36px 32px; background: white;">
+              <p style="color: #2d1b2e; font-size: 18px; font-weight: 600; margin-top: 0;">Hey <strong>${firstName}</strong>! So happy to have you here ✨</p>
+              <p style="color: #64748b; font-size: 16px; line-height: 1.6;">Here's how Planny works:</p>
+              
+              <div style="border-left: 4px solid #f472b6; padding: 16px; margin: 24px 0; background: #fdf2f8; border-radius: 0 16px 16px 0;">
+                <p style="margin: 0 0 12px; color: #2d1b2e; line-height: 1.5;">🌙 <strong>Every night at 10 PM</strong><br><span style="color: #64748b; font-size: 14px;">Planny emails you asking what you want to achieve tomorrow.</span></p>
+                <p style="margin: 0; color: #2d1b2e; line-height: 1.5;">☀️ <strong>Every morning at 7 AM</strong><br><span style="color: #64748b; font-size: 14px;">Wake up to your task list + an AI motivational quote.</span></p>
               </div>
-              <p style="color: #555; font-size: 16px;">No app. No dashboard. <strong>Everything in your inbox.</strong></p>
-              <div style="text-align: center; margin: 28px 0;">
-                <a href="${planUrl}" style="background: linear-gradient(135deg, #FFB6C1, #f9a8d4); color: white; padding: 14px 28px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 16px;">Plan My First Day 🌸</a>
+              
+              <p style="color: #64748b; font-size: 16px; text-align: center; margin-bottom: 32px;">No app. No dashboard. <strong>Everything in your inbox.</strong></p>
+              
+              <div style="text-align: center; margin: 32px 0 16px;">
+                <a href="${planUrl}" style="display: inline-block; background: #c084fc; color: white; padding: 18px 32px; border-radius: 9999px; text-decoration: none; font-weight: 700; font-size: 16px; box-shadow: 0 8px 20px rgba(192,132,252,0.25); transition: background 0.3s ease;">Plan My First Day 🌸</a>
               </div>
-              <p style="color: #888; font-size: 14px; text-align: center;">See you tonight at 10 PM! 💌</p>
+              
+              <p style="color: #94a3b8; font-size: 14px; text-align: center; margin-top: 32px; font-weight: 500;">See you tonight at 10 PM! 💌</p>
             </div>
           </div>
         `

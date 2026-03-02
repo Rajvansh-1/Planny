@@ -43,10 +43,22 @@ export default function Home() {
         <div className="glass-panel pop-in" style={{ maxWidth: '480px', width: '100%', textAlign: 'center', padding: '40px 32px' }}>
 
           {/* Adorable Precious Logo Container */}
-          <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', marginBottom: '32px' }}>
-            <div style={{ position: 'relative', background: 'white', borderRadius: '40px', padding: '16px', boxShadow: 'var(--shadow-md)', border: '1px solid rgba(255,255,255,0.6)', transition: 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.5s ease', transform: 'rotate(-4deg)' }} onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-6px) rotate(4deg)'; e.currentTarget.style.boxShadow = 'var(--shadow-vibrant)'; }} onMouseOut={e => { e.currentTarget.style.transform = 'translateY(0) rotate(-4deg)'; e.currentTarget.style.boxShadow = 'var(--shadow-md)'; }}>
-              <img src="/planny-logo.png" alt="Planny" style={{ width: '100px', height: '100px', objectFit: 'contain' }} />
+          <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', marginBottom: '40px' }}>
+            <div style={{
+              position: 'relative',
+              padding: '16px',
+              animation: 'float 4s ease-in-out infinite',
+              filter: 'drop-shadow(0 12px 24px rgba(244,114,182,0.3))'
+            }}>
+              <img src="/planny-logo.png" alt="Planny" style={{ width: '160px', height: '160px', objectFit: 'contain' }} />
             </div>
+            <style>{`
+              @keyframes float {
+                0% { transform: translateY(0px) rotate(-2deg); }
+                50% { transform: translateY(-12px) rotate(2deg); }
+                100% { transform: translateY(0px) rotate(-2deg); }
+              }
+            `}</style>
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
