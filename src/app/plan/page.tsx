@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useEffect, Suspense } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { CheckCircle2, Circle, X, Plus, Pencil, Check, Loader2 } from 'lucide-react';
+import { useState, useEffect, useCallback, useMemo, Suspense } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Plus, Check, Trash2, Loader2, Sparkles, Moon, Sun, ArrowLeft, Pencil, X, CheckCircle2, Circle, CalendarDays, Edit2, PartyPopper } from 'lucide-react';
+import { format, isTomorrow, isToday, parseISO } from 'date-fns';
 
 type Task = {
   id: string | null;
@@ -24,6 +26,9 @@ function PlanForm() {
   const [saving, setSaving] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editText, setEditText] = useState('');
+  const [isNavigatingCalendar, setIsNavigatingCalendar] = useState(false);
+  const [loadingTasks, setLoadingTasks] = useState<string[]>([]);
+
 
   // Tomorrow's date for new tasks
   const tomorrow = new Date();
@@ -92,14 +97,37 @@ function PlanForm() {
   };
 
   const toggleTask = async (task: Task) => {
-    if (!task.id || task.isNew) return;
-    const newCompleted = !task.completed;
-    setTasks(prev => prev.map(t => t.id === task.id ? { ...t, completed: newCompleted } : t));
-    await fetch('/api/tasks', {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ taskId: task.id, completed: newCompleted }),
-    });
+    if (!task.id || task.isNew || loadingTasks.includes(task.id)) return;
+
+    try {
+      setLoadingTasks(prev => [...prev, task.id!]);
+      const newStatus = !task.completed;
+
+      const res = await fetch(`/api/tasks/${task.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ completed: newStatus }),
+      });
+
+      if (res.ok) {
+        setTasks(tasks.map(t =>
+          t.id === task.id ? { ...t, completed: newStatus, isSaving: false } : t
+        ));
+      } else {
+        // Revert on failure
+        setTasks(tasks.map(t =>
+          t.id === task.id ? { ...t, isSaving: false } : t
+        ));
+      }
+    } catch (error) {
+      console.error('Failed to toggle task:', error);
+      // Revert on failure
+      setTasks(tasks.map(t =>
+        t.id === task.id ? { ...t, isSaving: false } : t
+      ));
+    } finally {
+      setLoadingTasks(prev => prev.filter(id => id !== task.id));
+    }
   };
 
   const deleteTask = async (task: Task) => {
@@ -138,168 +166,267 @@ function PlanForm() {
   const completedCount = tasks.filter(t => t.completed).length;
 
   return (
-    <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', padding: '1.5rem', overflow: 'hidden' }}>
-      <div className="glass-panel" style={{ maxWidth: '600px', width: '100%', flex: 1, display: 'flex', flexDirection: 'column', animation: 'fadeInUp 0.6s ease-out', position: 'relative', marginTop: '1rem', padding: '24px' }}>
+    <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', padding: '1.5rem', overflow: 'hidden', position: 'relative', zIndex: 1 }}>
+
+      <div className="mesmerizing-bg"></div>
+
+      {isNavigatingCalendar && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,248,246,0.8)', backdropFilter: 'blur(8px)', animation: 'fadeIn 0.3s ease' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', background: 'white', padding: '40px 60px', borderRadius: '40px', boxShadow: 'var(--shadow-lg)', border: '2px solid rgba(45,27,46,0.08)' }}>
+            <Loader2 size={48} className="spinner" style={{ color: 'var(--accent)' }} />
+            <span style={{ fontSize: '1.4rem', fontWeight: '800', color: 'var(--text-dark)', letterSpacing: '-0.02em' }}>Loading your calendar... ✨</span>
+          </div>
+        </div>
+      )}
+
+      <div className="glass-panel pop-in" style={{ maxWidth: '650px', width: '100%', flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', marginTop: '1rem', padding: '40px 32px' }}>
 
         {/* Navigation / Back Button */}
-        <button onClick={() => router.push('/dashboard')} style={{ position: 'absolute', top: '24px', left: '24px', background: 'rgba(255,255,255,0.6)', border: '1px solid rgba(249,168,212,0.5)', borderRadius: '50%', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#6b7280', transition: 'all 0.2s', zIndex: 10 }}>
-          ←
-        </button>
+        <div style={{ position: 'absolute', top: '24px', left: '24px', display: 'flex', alignItems: 'center', gap: '16px', zIndex: 10 }}>
+          <button
+            onClick={() => router.push('/dashboard')}
+            style={{ background: 'rgba(255,255,255,0.9)', border: '2px solid rgba(45,27,46,0.08)', borderRadius: '16px', width: '48px', height: '48px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-dark)', fontWeight: '700', boxShadow: 'var(--shadow-sm)', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', flexShrink: 0 }}
+            title="Go to Dashboard"
+            onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = 'var(--shadow-md)'; e.currentTarget.style.borderColor = 'rgba(45,27,46,0.15)'; }}
+            onMouseOut={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'var(--shadow-sm)'; e.currentTarget.style.borderColor = 'rgba(45,27,46,0.08)'; }}
+            onMouseDown={e => { e.currentTarget.style.transform = 'translateY(1px) scale(0.95)'; e.currentTarget.style.boxShadow = 'none'; }}
+          >
+            <ArrowLeft size={24} />
+          </button>
+          <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span style={{ fontSize: '13px', background: 'linear-gradient(135deg, rgba(244,114,182,0.15), rgba(253,224,217,0.4))', border: '1px solid rgba(244,114,182,0.2)', color: 'var(--accent)', padding: '6px 16px', borderRadius: '40px', fontWeight: '800', letterSpacing: '0.05em', boxShadow: 'var(--shadow-sm)' }}>PLANNING 🎯</span>
+              <img src="/planny-logo.png" alt="Planny" style={{ width: '48px', height: '48px', objectFit: 'contain', background: 'white', borderRadius: '16px', padding: '8px', border: '2px solid rgba(255,255,255,0.8)', boxShadow: 'var(--shadow-sm)' }} />
+            </div>
+          </div>
+        </div>
 
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '28px', marginTop: '8px' }}>
-          <img src="/planny-logo.png" alt="Planny" style={{ width: '96px', height: '96px', objectFit: 'contain', filter: 'drop-shadow(0 6px 14px rgba(249,168,212,0.4))', marginBottom: '12px', animation: 'float 3s ease-in-out infinite' }} />
-          <h1 style={{ fontSize: '2rem', color: '#1f2937', margin: '0 0 6px', letterSpacing: '-0.02em', fontWeight: '800' }}>Plan Tomorrow 🌱</h1>
-          <p style={{ color: '#6b7280', margin: 0, fontSize: '15px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '36px', marginTop: '16px' }}>
+          <h1 className="text-glow" style={{ fontSize: '2.4rem', margin: '0 0 8px', lineHeight: '1.2', fontWeight: '800', letterSpacing: '-0.02em' }}>Plan Tomorrow ✨</h1>
+          <p style={{ color: '#64748b', margin: 0, fontSize: '1.1rem', fontWeight: '400' }}>
             {loading ? 'Waking up your list...' : tasks.length > 0
-              ? `You did ${completedCount}/${tasks.length} tasks today! Add more down below.`
+              ? <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>You did {completedCount}/{tasks.length} tasks today! {completedCount === tasks.length && completedCount > 0 ? <PartyPopper size={20} style={{ color: 'var(--accent)', animation: 'popIn 0.5s ease-out' }} /> : ''}</span>
               : 'Add your goals for tomorrow below'}
           </p>
         </div>
 
         {/* Add task form */}
-        <form onSubmit={addTask} style={{ display: 'flex', gap: '8px', marginBottom: '24px', position: 'relative' }}>
+        <form onSubmit={addTask} style={{ display: 'flex', gap: '12px', marginBottom: '40px', position: 'relative' }}>
           <input
             type="text"
             className="input-glass"
-            style={{ marginBottom: 0, flex: 1, padding: '16px 20px', paddingRight: '100px', fontSize: '16px', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}
-            placeholder="E.g. Finish the presentation..."
+            style={{ marginBottom: 0, flex: 1, paddingRight: '20px' }}
+            placeholder="E.g. Code for 2 hours..."
             value={taskInput}
             onChange={e => setTaskInput(e.target.value)}
           />
-          <button type="submit" className="btn" style={{ position: 'absolute', right: '6px', top: '6px', bottom: '6px', padding: '0 20px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '15px', fontWeight: 'bold' }}>
-            <Plus size={18} /> Add
+          <button type="submit" className="btn" disabled={!taskInput.trim()} style={{ padding: '0 24px', borderRadius: '14px' }}>
+            <Plus size={20} strokeWidth={2.5} />
           </button>
         </form>
 
         {/* Task list */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '30px', flex: 1 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '32px', flex: 1 }}>
           {loading ? (
-            <div style={{ textAlign: 'center', padding: '40px 20px', color: '#f9a8d4', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px', animation: 'pulse 2s infinite' }}>
-              <Loader2 size={36} style={{ animation: 'spin 1s linear infinite' }} />
-              <span style={{ fontWeight: '500' }}>Loading tasks...</span>
+            <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--primary)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', animation: 'pulse 2s infinite' }}>
+              <Loader2 size={48} className="spinner" />
+              <span style={{ fontWeight: '800', fontSize: '1.2rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Loading tasks...</span>
             </div>
           ) : tasks.length === 0 ? (
-            <div style={{ textAlign: 'center', background: 'rgba(255,255,255,0.5)', border: '2px dashed #fbcfe8', borderRadius: '16px', padding: '40px 20px', animation: 'fadeIn 0.5s ease-out' }}>
-              <p style={{ color: '#9ca3af', fontStyle: 'italic', margin: 0, fontSize: '16px' }}>
-                No tasks yet — start adding your goals! ✨
+            <div className="pop-in" style={{ textAlign: 'center', background: 'rgba(255,255,255,0.6)', border: '1px dashed rgba(0,0,0,0.1)', borderRadius: '24px', padding: '48px 24px' }}>
+              <p style={{ color: '#94a3b8', fontStyle: 'italic', margin: 0, fontSize: '1.1rem', fontWeight: '400' }}>
+                No tasks yet — start adding your goals ✨
               </p>
             </div>
-          ) : tasks.map((task) => (
-            <div
-              key={task.id}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                background: task.completed ? 'rgba(52,211,153,0.08)' : 'rgba(255,255,255,0.9)',
-                padding: '16px',
-                borderRadius: '16px',
-                borderLeft: `5px solid ${task.completed ? '#34d399' : '#f9a8d4'}`,
-                boxShadow: task.completed ? 'none' : '0 4px 10px rgba(0,0,0,0.03)',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                transform: task.isNew ? 'scale(0.95)' : 'scale(1)',
-                opacity: task.isNew ? 0.7 : 1,
-                animation: 'fadeInUp 0.3s ease-out forwards'
-              }}
-            >
-              {/* Checkbox */}
-              <button
-                onClick={() => toggleTask(task)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', flexShrink: 0, lineHeight: 0, transition: 'transform 0.2s' }}
-                title={task.completed ? 'Mark as pending' : 'Mark as done'}
-                onMouseOver={e => e.currentTarget.style.transform = 'scale(1.1)'}
-                onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
-              >
-                {task.isSaving
-                  ? <Loader2 size={24} color="#d1d5db" style={{ animation: 'spin 1s linear infinite' }} />
-                  : task.completed
-                    ? <CheckCircle2 size={26} color="#34d399" />
-                    : <Circle size={26} color="#d1d5db" />}
-              </button>
-
-              {/* Task content or inline editor */}
-              {editingId === task.id ? (
-                <>
-                  <input
-                    value={editText}
-                    onChange={e => setEditText(e.target.value)}
-                    onKeyDown={e => e.key === 'Enter' && saveEdit(task)}
-                    autoFocus
-                    style={{ flex: 1, border: '2px solid #f9a8d4', borderRadius: '10px', padding: '8px 12px', fontSize: '16px', outline: 'none', background: 'rgba(255,255,255,0.9)' }}
-                  />
-                  <button onClick={() => saveEdit(task)} style={{ background: '#ecfdf5', border: 'none', cursor: 'pointer', color: '#10b981', padding: '8px', borderRadius: '8px' }} title="Save">
-                    <Check size={20} />
-                  </button>
-                  <button onClick={() => setEditingId(null)} style={{ background: '#fef2f2', border: 'none', cursor: 'pointer', color: '#ef4444', padding: '8px', borderRadius: '8px' }} title="Cancel">
-                    <X size={20} />
-                  </button>
-                </>
-              ) : (
-                <>
-                  <span style={{ flex: 1, color: task.completed ? '#9ca3af' : '#1f2937', textDecoration: task.completed ? 'line-through' : 'none', fontSize: '16px', lineHeight: '1.4', fontWeight: '500', transition: 'all 0.2s' }}>
-                    {task.content}
-                  </span>
-                  {/* Edit button */}
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {tasks.map((task) => (
+                <div
+                  key={task.id}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    background: task.completed ? 'rgba(255,255,255,0.4)' : 'white',
+                    padding: '24px',
+                    borderRadius: '24px',
+                    border: task.completed ? '1px solid rgba(255,255,255,0.5)' : '2px solid rgba(45,27,46,0.06)',
+                    boxShadow: task.completed ? 'none' : 'var(--shadow-sm)',
+                    transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                    animation: 'fadeUp 0.3s ease-out forwards',
+                    opacity: task.completed ? 0.6 : 1,
+                    gap: '16px'
+                  }}
+                  onMouseOver={e => {
+                    if (!task.completed && editingId !== task.id) {
+                      e.currentTarget.style.transform = 'translateY(-4px)';
+                      e.currentTarget.style.boxShadow = 'var(--shadow-md)';
+                      e.currentTarget.style.borderColor = 'rgba(45,27,46,0.15)';
+                    }
+                  }}
+                  onMouseOut={e => {
+                    if (!task.completed && editingId !== task.id) {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
+                      e.currentTarget.style.borderColor = 'rgba(45,27,46,0.06)';
+                    }
+                  }}
+                >
                   <button
-                    onClick={() => !task.isSaving && startEdit(task)}
-                    style={{ background: 'none', border: 'none', cursor: task.isSaving ? 'not-allowed' : 'pointer', color: task.isSaving ? '#e5e7eb' : '#9ca3af', padding: '6px', flexShrink: 0, transition: 'color 0.2s' }}
-                    title={task.isSaving ? 'Wait for task to save...' : 'Edit task'}
-                    disabled={task.isSaving}
-                    onMouseOver={e => !task.isSaving && (e.currentTarget.style.color = '#f9a8d4')}
-                    onMouseOut={e => !task.isSaving && (e.currentTarget.style.color = '#9ca3af')}
+                    onClick={() => toggleTask(task)}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', flexShrink: 0, lineHeight: 0, transition: 'transform 0.1s ease' }}
+                    title={task.completed ? 'Mark as pending' : 'Mark as done'}
+                    onMouseOver={e => e.currentTarget.style.transform = 'scale(1.15) rotate(5deg)'}
+                    onMouseOut={e => e.currentTarget.style.transform = 'scale(1) rotate(0)'}
+                    onMouseDown={e => e.currentTarget.style.transform = 'scale(0.9)'}
                   >
-                    <Pencil size={18} />
+                    {loadingTasks.includes(task.id!) ? (
+                      <Loader2 size={28} color="var(--text-dark)" className="spinner" />
+                    ) : task.completed ? (
+                      <CheckCircle2 size={32} style={{ color: '#10b981' }} />
+                    ) : (
+                      <Circle size={32} style={{ color: '#94a3b8' }} />
+                    )}
                   </button>
-                  {/* Delete button */}
-                  <button
-                    onClick={() => !task.isSaving && deleteTask(task)}
-                    style={{ background: 'none', border: 'none', cursor: task.isSaving ? 'not-allowed' : 'pointer', color: task.isSaving ? '#e5e7eb' : '#fca5a5', padding: '6px', flexShrink: 0, transition: 'color 0.2s' }}
-                    title={task.isSaving ? 'Wait for task to save...' : 'Delete task'}
-                    disabled={task.isSaving}
-                    onMouseOver={e => !task.isSaving && (e.currentTarget.style.color = '#ef4444')}
-                    onMouseOut={e => !task.isSaving && (e.currentTarget.style.color = '#fca5a5')}
-                  >
-                    <X size={20} />
-                  </button>
-                </>
-              )}
+                  {editingId === task.id ? (
+                    <input
+                      type="text"
+                      className="input-glass"
+                      value={editText}
+                      onChange={(e) => setEditText(e.target.value)}
+                      onBlur={() => saveEdit(task as any)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') saveEdit(task as any);
+                        if (e.key === 'Escape') setEditingId(null);
+                      }}
+                      autoFocus
+                      style={{ flex: 1, padding: '12px 16px', fontSize: '1.15rem' }}
+                    />
+                  ) : (
+                    <span
+                      style={{
+                        flex: 1,
+                        color: task.completed ? '#cbd5e1' : 'var(--text-dark)',
+                        textDecoration: task.completed ? 'line-through' : 'none',
+                        lineHeight: '1.4',
+                        fontSize: '1.25rem',
+                        fontWeight: '700',
+                        transition: 'all 0.3s ease',
+                        wordBreak: 'break-word',
+                        whiteSpace: 'pre-wrap',
+                        paddingTop: '2px'
+                      }}
+                      onDoubleClick={() => startEdit(task as any)}
+                    >
+                      {task.content}
+                    </span>
+                  )}
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <button
+                      onClick={() => editingId === task.id ? saveEdit(task as any) : startEdit(task as any)}
+                      style={{
+                        background: 'rgba(255,255,255,0.9)',
+                        border: '1px solid rgba(45,27,46,0.08)',
+                        borderRadius: '12px',
+                        width: '40px',
+                        height: '40px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        color: '#64748b',
+                        transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                        boxShadow: 'var(--shadow-sm)'
+                      }}
+                      onMouseOver={e => {
+                        e.currentTarget.style.color = 'var(--text-dark)';
+                        e.currentTarget.style.background = '#fff0f5';
+                        e.currentTarget.style.borderColor = 'rgba(244,114,182,0.3)';
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow = 'var(--shadow-md)';
+                      }}
+                      onMouseOut={e => {
+                        e.currentTarget.style.color = '#64748b';
+                        e.currentTarget.style.background = 'rgba(255,255,255,0.9)';
+                        e.currentTarget.style.borderColor = 'rgba(45,27,46,0.08)';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
+                      }}
+                    >
+                      {editingId === task.id ? <Check size={20} style={{ color: '#10b981' }} /> : <Edit2 size={20} />}
+                    </button>
+                    <button
+                      onClick={() => deleteTask(task as any)}
+                      style={{
+                        background: 'rgba(255,255,255,0.9)',
+                        border: '1px solid rgba(45,27,46,0.08)',
+                        borderRadius: '12px',
+                        width: '40px',
+                        height: '40px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        color: '#94a3b8',
+                        transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                        boxShadow: 'var(--shadow-sm)'
+                      }}
+                      onMouseOver={e => {
+                        e.currentTarget.style.color = '#ef4444';
+                        e.currentTarget.style.background = '#fef2f2';
+                        e.currentTarget.style.borderColor = 'rgba(239,68,68,0.3)';
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow = 'var(--shadow-md)';
+                      }}
+                      onMouseOut={e => {
+                        e.currentTarget.style.color = '#94a3b8';
+                        e.currentTarget.style.background = 'rgba(255,255,255,0.9)';
+                        e.currentTarget.style.borderColor = 'rgba(45,27,46,0.08)';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
+                      }}
+                    >
+                      <Trash2 size={20} />
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
 
-        {/* Footer links */}
-        <div style={{ textAlign: 'center', paddingTop: '20px', display: 'flex', justifyContent: 'center', gap: '20px' }}>
-          <button onClick={() => router.push('/calendar')} style={{ background: 'none', border: 'none', color: '#f9a8d4', textDecoration: 'none', fontSize: '15px', fontWeight: 'bold', cursor: 'pointer', padding: '10px 20px', borderRadius: '20px', backgroundColor: 'rgba(249,168,212,0.1)' }}>
-            📅 View Calendar
+        <div style={{ textAlign: 'center', paddingTop: '24px', display: 'flex', justifyContent: 'center', gap: '20px' }}>
+          <button
+            onClick={() => {
+              setIsNavigatingCalendar(true);
+              router.push(`/calendar?email=${encodeURIComponent(email || '')}`);
+            }}
+            className="btn pop-in"
+            disabled={isNavigatingCalendar}
+            style={{
+              width: '100%',
+              marginTop: '40px',
+              padding: '24px',
+              fontSize: '1.25rem',
+              gap: '12px',
+              background: 'rgba(255,255,255,0.9)',
+              color: 'var(--text-dark)',
+              border: '2px solid rgba(45,27,46,0.08)',
+              boxShadow: 'var(--shadow-sm)',
+              animationDelay: '0.4s'
+            }}
+            onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = 'var(--shadow-md)'; e.currentTarget.style.borderColor = 'rgba(45,27,46,0.15)'; }}
+            onMouseOut={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'var(--shadow-sm)'; e.currentTarget.style.borderColor = 'rgba(45,27,46,0.08)'; }}
+            onMouseDown={e => { e.currentTarget.style.transform = 'translateY(1px) scale(0.98)'; }}
+          >
+            {isNavigatingCalendar ? <Loader2 size={24} className="spinner" /> : <CalendarDays size={24} />}
+            {isNavigatingCalendar ? 'Opening Calendar...' : 'View My Calendar'}
           </button>
         </div>
       </div>
 
-      <style jsx global>{`
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        @keyframes float {
-          0% { transform: translateY(0px); }
-          50% { transform: translateY(-6px); }
-          100% { transform: translateY(0px); }
-        }
-        @keyframes pulse {
-          0% { opacity: 0.6; transform: scale(0.96); }
-          50% { opacity: 1; transform: scale(1.04); }
-          100% { opacity: 0.6; transform: scale(0.96); }
-        }
-        .input-glass:focus {
-          border-color: #fca5a5 !important;
-          box-shadow: 0 0 0 4px rgba(252,165,165,0.2) !important;
-        }
-      `}</style>
+      {/* Removed styles from here since they were moved to globals.css */}
     </main>
   );
 }

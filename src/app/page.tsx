@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { CheckCircle2, Moon, Sun, CalendarDays, Sparkles } from 'lucide-react';
+import { CheckCircle2, Moon, Sun, CalendarDays, Sparkles, ArrowRight, Zap } from 'lucide-react';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
@@ -35,124 +35,155 @@ export default function Home() {
   };
 
   return (
-    <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', overflow: 'hidden' }}>
-      <div className="glass-panel" style={{ maxWidth: '440px', width: '100%', textAlign: 'center', animation: 'fadeInUp 0.6s ease-out' }}>
+    <>
+      {/* Vibrant Dot Background */}
+      <div className="mesmerizing-bg"></div>
 
-        {/* Logo */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
-          <img src="/planny-logo.png" alt="Planny" style={{ width: '130px', height: '130px', objectFit: 'contain', filter: 'drop-shadow(0 6px 16px rgba(249,168,212,0.6))', animation: 'float 3s ease-in-out infinite' }} />
-        </div>
-        <h1 style={{ fontSize: '2.4rem', color: '#1f2937', marginBottom: '8px', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
-          Meet Planny <span style={{ fontSize: '14px', background: 'linear-gradient(135deg, #FFB6C1, #f9a8d4)', color: 'white', padding: '4px 10px', borderRadius: '20px', letterSpacing: '0.05em', fontWeight: 'bold', textTransform: 'uppercase', verticalAlign: 'middle' }}>Beta</span> 🐾
-        </h1>
-        <p style={{ fontSize: '1rem', color: '#6b7280', marginBottom: '28px', lineHeight: '1.5' }}>
-          Your daily AI planner. Get a <strong>10 PM check-in</strong> and a <strong>7 AM digest</strong> straight to your inbox. No app needed.
-        </p>
+      <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', position: 'relative', zIndex: 1 }}>
+        <div className="glass-panel pop-in" style={{ maxWidth: '480px', width: '100%', textAlign: 'center', padding: '40px 32px' }}>
 
-        {status === "loading" ? (
-          <div style={{ padding: '30px', color: '#f9a8d4', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', animation: 'pulse 2s infinite' }}>
-            <Sparkles size={32} />
-            <span style={{ fontSize: '16px', fontWeight: '500' }}>Waking Planny up... ✨</span>
+          {/* Adorable Precious Logo Container */}
+          <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', marginBottom: '32px' }}>
+            <div style={{ position: 'relative', background: 'white', borderRadius: '40px', padding: '16px', boxShadow: 'var(--shadow-md)', border: '1px solid rgba(255,255,255,0.6)', transition: 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.5s ease', transform: 'rotate(-4deg)' }} onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-6px) rotate(4deg)'; e.currentTarget.style.boxShadow = 'var(--shadow-vibrant)'; }} onMouseOut={e => { e.currentTarget.style.transform = 'translateY(0) rotate(-4deg)'; e.currentTarget.style.boxShadow = 'var(--shadow-md)'; }}>
+              <img src="/planny-logo.png" alt="Planny" style={{ width: '100px', height: '100px', objectFit: 'contain' }} />
+            </div>
           </div>
 
-        ) : session ? (
-          /* ─── LOGGED IN STATE ─── */
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center', padding: '24px', background: 'rgba(255,255,255,0.8)', borderRadius: '16px', border: '2px solid #fbcfe8', boxShadow: '0 4px 20px rgba(0,0,0,0.03)', animation: 'fadeIn 0.5s ease-out' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-              {session.user?.image ? (
-                <img src={session.user.image} alt="" style={{ width: '42px', height: '42px', borderRadius: '50%', border: '2px solid white', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }} />
-              ) : (
-                <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'linear-gradient(135deg, #fbcfe8, #f9a8d4)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold', fontSize: '18px', border: '2px solid white', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-                  {session.user?.email?.[0].toUpperCase()}
-                </div>
-              )}
-              <h2 style={{ color: '#1f2937', fontSize: '1.3rem', margin: 0, fontWeight: '700' }}>
-                Hey {session.user?.name?.split(' ')[0] || session.user?.email?.split('@')[0]}! ✨
-              </h2>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
+            <span style={{ fontSize: '13px', background: 'linear-gradient(135deg, rgba(244,114,182,0.15), rgba(253,224,217,0.4))', border: '1px solid rgba(244,114,182,0.2)', color: 'var(--accent)', padding: '8px 20px', borderRadius: '40px', fontWeight: '800', letterSpacing: '0.05em', boxShadow: 'var(--shadow-sm)' }}>✨ BETA ACCESS</span>
+          </div>
+
+          <h1 className="text-glow" style={{ fontSize: '3.2rem', margin: '0 0 16px', lineHeight: '1.1', display: 'flex', flexDirection: 'column', alignItems: 'center', fontWeight: '800', letterSpacing: '-0.04em' }}>
+            <span>Meet Planny</span>
+          </h1>
+          <p style={{ fontSize: '1.15rem', color: '#64748b', marginBottom: '40px', lineHeight: '1.6', fontWeight: '400', maxWidth: '380px', margin: '0 auto 40px' }}>
+            Experience peak clarity. Get a <strong>10 PM evening check-in</strong> and a <strong>7 AM morning digest</strong> right in your inbox.
+          </p>
+
+          {status === "loading" ? (
+            <div style={{ padding: '40px', color: 'var(--primary)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', animation: 'pulse 2s infinite' }}>
+              <Sparkles size={36} className="spinner" />
+              <span style={{ fontSize: '17px', fontWeight: '600' }}>Waking Planny up... ✨</span>
             </div>
 
-            <button onClick={() => router.push('/calendar')} className="btn" style={{ width: '100%', fontSize: '1.05rem', display: 'flex', justifyContent: 'center', gap: '8px', alignItems: 'center', padding: '14px' }}>
-              <CalendarDays size={18} /> Open My Calendar
-            </button>
-            <button onClick={() => router.push(`/plan?email=${encodeURIComponent(session.user?.email || '')}`)} className="btn" style={{ width: '100%', fontSize: '1.05rem', display: 'flex', justifyContent: 'center', gap: '8px', alignItems: 'center', background: 'rgba(255,255,255,0.9)', color: '#374151', border: '1px solid #f9a8d4', padding: '14px' }}>
-              <Sparkles size={18} style={{ color: '#f9a8d4' }} /> Plan Tomorrow
-            </button>
+          ) : session ? (
+            /* ─── LOGGED IN STATE ─── */
+            <div className="pop-in" style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'center', padding: '32px', background: 'rgba(255,255,255,0.85)', borderRadius: '32px', border: '1px solid rgba(255,255,255,0.6)', boxShadow: 'var(--shadow-md)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '8px' }}>
+                {session.user?.image ? (
+                  <img src={session.user.image} alt="" style={{ width: '64px', height: '64px', borderRadius: '50%', border: '4px solid white', boxShadow: 'var(--shadow-md)' }} />
+                ) : (
+                  <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'linear-gradient(135deg, var(--secondary), #fff)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', fontWeight: '800', fontSize: '24px', border: '4px solid white', boxShadow: 'var(--shadow-md)' }}>
+                    {session.user?.email?.[0]?.toUpperCase() || '?'}
+                  </div>
+                )}
+                <h2 style={{ color: 'var(--text-dark)', fontSize: '1.4rem', margin: 0, fontWeight: '800', letterSpacing: '-0.02em' }}>
+                  Wait, you're back?! <br /> {session.user?.name?.split(' ')[0] || session.user?.email?.split('@')[0]} 🌸
+                </h2>
+              </div>
 
-            <button onClick={() => signOut()} style={{ background: 'none', border: 'none', color: '#9ca3af', textDecoration: 'underline', cursor: 'pointer', fontSize: '13px', marginTop: '8px' }}>
-              Sign Out
-            </button>
-          </div>
-
-        ) : success ? (
-          /* ─── SUCCESS STATE ─── */
-          <div style={{ padding: '32px 24px', background: 'rgba(255,255,255,0.85)', borderRadius: '16px', border: '2px dashed #fbcfe8', animation: 'fadeInScale 0.4s ease-out' }}>
-            <CheckCircle2 size={56} style={{ color: '#34d399', margin: '0 auto 16px', filter: 'drop-shadow(0 4px 8px rgba(52,211,153,0.3))' }} />
-            <h2 style={{ color: '#1f2937', fontSize: '1.6rem', marginBottom: '10px', fontWeight: '700' }}>Check your inbox! 💌</h2>
-            <p style={{ color: '#6b7280', marginBottom: '0', fontSize: '15px' }}>
-              We've sent a magic link to <strong>{email}</strong>. Click it to log in and start planning!
-            </p>
-          </div>
-
-        ) : (
-          <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
-            <button
-              onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
-              style={{ width: '100%', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: 'white', color: '#374151', border: '1.5px solid #e5e7eb', borderRadius: '14px', padding: '14px 20px', cursor: 'pointer', fontWeight: '600', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', marginBottom: '20px', transition: 'all 0.2s', letterSpacing: '-0.01em' }}
-              onMouseOver={e => { e.currentTarget.style.boxShadow = '0 6px 16px rgba(0,0,0,0.08)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
-              onMouseOut={e => { e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)'; e.currentTarget.style.transform = 'translateY(0)'; }}
-            >
-              <img src="https://www.svgrepo.com/show/475656/google-color.svg" width={22} alt="Google" />
-              Continue with Google
-            </button>
-
-            <div style={{ display: 'flex', alignItems: 'center', margin: '4px 0 20px', color: '#9ca3af' }}>
-              <div style={{ flex: 1, height: '1px', background: '#e5e7eb' }}></div>
-              <span style={{ padding: '0 12px', fontSize: '12px', fontWeight: '600', letterSpacing: '0.05em' }}>OR EMAIL</span>
-              <div style={{ flex: 1, height: '1px', background: '#e5e7eb' }}></div>
-            </div>
-
-            <form onSubmit={subscribe} style={{ display: 'flex', flexDirection: 'column', gap: '12px', textAlign: 'left' }}>
-              <input
-                type="email"
-                className="input-glass"
-                placeholder="you@email.com"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                required
-                style={{ padding: '14px 16px', fontSize: '16px' }}
-              />
-              {error && <p style={{ color: '#ef4444', fontSize: '13px', margin: '0 0 4px', textAlign: 'center', fontWeight: '500' }}>{error}</p>}
-              <button type="submit" className="btn" disabled={loading} style={{ padding: '14px', fontSize: '1.05rem' }}>
-                {loading ? 'Sending magic link... ✨' : 'Get Magic Link 🌸'}
+              <button onClick={() => router.push('/calendar')} className="btn" style={{ width: '100%', display: 'flex', justifyContent: 'center', gap: '12px', alignItems: 'center', padding: '16px' }}>
+                <CalendarDays size={20} /> Open My Calendar
               </button>
-            </form>
-          </div>
-        )}
+              <button
+                onClick={() => router.push(`/plan?email=${encodeURIComponent(session.user?.email || '')}`)}
+                className="btn"
+                style={{ width: '100%', display: 'flex', justifyContent: 'center', gap: '12px', alignItems: 'center', background: 'white', color: 'var(--accent)', border: '2px solid rgba(244,114,182,0.2)', padding: '16px', boxShadow: 'var(--shadow-sm)' }}
+                onMouseOver={e => { e.currentTarget.style.background = '#fff0f5'; e.currentTarget.style.borderColor = 'rgba(244,114,182,0.5)'; }}
+                onMouseOut={e => { e.currentTarget.style.background = 'white'; e.currentTarget.style.borderColor = 'rgba(244,114,182,0.2)'; }}
+              >
+                <Sparkles size={20} style={{ color: 'var(--accent)' }} /> Plan Tomorrow
+              </button>
 
-        {/* How it works */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: '12px', marginTop: '32px', textAlign: 'left' }}>
-          <div style={{ padding: '18px 16px', background: 'rgba(255,255,255,0.5)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.8)' }}>
-            <Moon style={{ color: '#a78bfa', marginBottom: '10px' }} size={24} />
-            <h3 style={{ fontSize: '15px', fontWeight: '700', margin: '0 0 4px', color: '#374151' }}>10 PM Check-in</h3>
-            <p style={{ fontSize: '13px', color: '#6b7280', margin: 0, lineHeight: '1.4' }}>Review today & plan tomorrow in 2 mins.</p>
+              <button onClick={() => signOut()} style={{ background: 'none', border: 'none', color: '#a1a1aa', textDecoration: 'none', cursor: 'pointer', fontSize: '14px', fontWeight: '600', marginTop: '16px', transition: 'color 0.2s', padding: '8px' }} onMouseOver={e => e.currentTarget.style.color = '#f43f5e'} onMouseOut={e => e.currentTarget.style.color = '#a1a1aa'}>
+                Sign Out
+              </button>
+            </div>
+
+          ) : success ? (
+            /* ─── SUCCESS STATE ─── */
+            <div className="pop-in" style={{ padding: '40px 32px', background: 'rgba(255,255,255,0.9)', borderRadius: '24px', border: '2px dashed var(--success)', boxShadow: '0 8px 30px rgba(52,211,153,0.1)' }}>
+              <div style={{ display: 'inline-block', background: '#ecfdf5', padding: '16px', borderRadius: '50%', marginBottom: '20px' }}>
+                <CheckCircle2 size={48} style={{ color: 'var(--success)' }} />
+              </div>
+              <h2 style={{ color: 'var(--text-dark)', fontSize: '1.8rem', marginBottom: '12px', fontWeight: '800', letterSpacing: '-0.02em' }}>Check your inbox! 💌</h2>
+              <p style={{ color: '#4b5563', marginBottom: '0', fontSize: '1.05rem', lineHeight: '1.5' }}>
+                We've sent a magic link to <strong>{email}</strong>. Click it to log in and start building your habit!
+              </p>
+            </div>
+
+          ) : (
+            <div style={{ animation: 'fadeInScale 0.6s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+              <button
+                onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+                style={{ width: '100%', fontSize: '1.15rem', display: 'flex', alignItems: 'center', justifyItems: 'center', justifyContent: 'center', gap: '12px', background: 'rgba(255,255,255,0.9)', color: 'var(--text-dark)', border: '2px solid rgba(45,27,46,0.08)', borderRadius: '20px', padding: '16px 24px', cursor: 'pointer', fontWeight: '700', boxShadow: 'var(--shadow-sm)', marginBottom: '24px', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }}
+                onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = 'var(--shadow-md)'; e.currentTarget.style.borderColor = 'rgba(45,27,46,0.15)'; }}
+                onMouseOut={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'var(--shadow-sm)'; e.currentTarget.style.borderColor = 'rgba(45,27,46,0.08)'; }}
+                onMouseDown={e => { e.currentTarget.style.transform = 'translateY(1px) scale(0.98)'; e.currentTarget.style.boxShadow = 'var(--shadow-sm)'; }}
+              >
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" width={24} alt="Google" />
+                Continue with Google
+              </button>
+
+              <div style={{ display: 'flex', alignItems: 'center', margin: '24px 0', color: '#cbd5e1' }}>
+                <div style={{ flex: 1, height: '2px', background: 'rgba(45,27,46,0.04)', borderRadius: '2px' }}></div>
+                <span style={{ padding: '0 16px', fontSize: '14px', fontWeight: '800', letterSpacing: '0.05em', color: '#a1a1aa' }}>OR MAGIC LINK</span>
+                <div style={{ flex: 1, height: '2px', background: 'rgba(45,27,46,0.04)', borderRadius: '2px' }}></div>
+              </div>
+
+              <form onSubmit={subscribe} style={{ display: 'flex', flexDirection: 'column', gap: '16px', textAlign: 'left' }}>
+                <input
+                  type="email"
+                  className="input-glass"
+                  placeholder="you@email.com"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  required
+                />
+                {error && <p style={{ color: '#f43f5e', fontSize: '14px', margin: '0', textAlign: 'center', fontWeight: '600' }}>{error}</p>}
+                <button type="submit" className="btn" disabled={loading} style={{ width: '100%', fontSize: '1.2rem', padding: '18px' }}>
+                  {loading ? 'Sending magic link... ✨' : 'Get Magic Link 🌸'}
+                </button>
+              </form>
+            </div>
+          )}
+
+          {/* How it works */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr)', gap: '16px', marginTop: '48px', width: '100%', maxWidth: '480px' }}>
+            <div style={{ padding: '24px', background: 'rgba(255,255,255,0.7)', borderRadius: '32px', border: '1px solid rgba(255,255,255,0.8)', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', display: 'flex', alignItems: 'center', gap: '20px', boxShadow: 'var(--shadow-sm)' }} onMouseOver={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.95)'; e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = 'var(--shadow-md)'; }} onMouseOut={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.7)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'var(--shadow-sm)'; }}>
+              <div style={{ background: '#e0e7ff', width: '64px', height: '64px', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: '2px solid white', boxShadow: 'var(--shadow-sm)' }}>
+                <Moon style={{ color: '#4f46e5', fill: '#818cf8' }} size={32} />
+              </div>
+              <div style={{ textAlign: 'left' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: '800', margin: '0 0 4px', color: 'var(--text-dark)' }}>10 PM Check-in</h3>
+                <p style={{ fontSize: '15px', color: '#64748b', margin: 0, lineHeight: '1.4', fontWeight: '500' }}>Reflect & plan tomorrow in 2 mins. True mental clarity.</p>
+              </div>
+            </div>
+            <div style={{ padding: '24px', background: 'rgba(255,255,255,0.7)', borderRadius: '32px', border: '1px solid rgba(255,255,255,0.8)', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', display: 'flex', alignItems: 'center', gap: '20px', boxShadow: 'var(--shadow-sm)' }} onMouseOver={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.95)'; e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = 'var(--shadow-md)'; }} onMouseOut={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.7)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'var(--shadow-sm)'; }}>
+              <div style={{ background: '#fef3c7', width: '64px', height: '64px', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: '2px solid white', boxShadow: 'var(--shadow-sm)' }}>
+                <Sun style={{ color: '#d97706', fill: '#fbbf24' }} size={32} />
+              </div>
+              <div style={{ textAlign: 'left' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: '800', margin: '0 0 4px', color: 'var(--text-dark)' }}>7 AM Digest</h3>
+                <p style={{ fontSize: '15px', color: '#64748b', margin: 0, lineHeight: '1.4', fontWeight: '500' }}>Wake up inspired with your distinct goals & an AI quote.</p>
+              </div>
+            </div>
           </div>
-          <div style={{ padding: '18px 16px', background: 'rgba(255,255,255,0.5)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.8)' }}>
-            <Sun style={{ color: '#fbbf24', marginBottom: '10px' }} size={24} />
-            <h3 style={{ fontSize: '15px', fontWeight: '700', margin: '0 0 4px', color: '#374151' }}>7 AM Digest</h3>
-            <p style={{ fontSize: '13px', color: '#6b7280', margin: 0, lineHeight: '1.4' }}>Wake up to tasks & an AI quote.</p>
-          </div>
+
+          {/* Adorable Pricing tag */}
+          {!session && !success && (
+            <div style={{ marginTop: '56px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '12px', background: 'white', padding: '16px 32px', borderRadius: '40px', color: 'var(--text-dark)', fontSize: '16px', fontWeight: '800', border: '1px solid rgba(255,255,255,0.8)', boxShadow: 'var(--shadow-md)' }}>
+                <Zap size={24} style={{ color: '#f59e0b', fill: '#f59e0b' }} />
+                <span>Subscribe to Planny Pro to hit your peak productivity</span>
+              </div>
+              <p style={{ color: '#64748b', fontSize: '15px', fontWeight: '600' }}>
+                20 Days Free • Then just <span style={{ color: 'var(--accent)', fontWeight: '800', fontSize: '17px' }}>₹19/month</span>
+              </p>
+            </div>
+          )}
         </div>
-
-        {/* Pricing tag */}
-        {!session && !success && (
-          <div style={{ marginTop: '32px', textAlign: 'center' }}>
-            <p style={{ display: 'inline-block', background: 'rgba(255,255,255,0.6)', padding: '6px 16px', borderRadius: '20px', color: '#4b5563', fontSize: '14px', fontWeight: '500', border: '1px solid rgba(249,168,212,0.3)', boxShadow: '0 2px 10px rgba(0,0,0,0.02)' }}>
-              20 Days Free Trial • Then just <span style={{ color: '#db2777', fontWeight: 'bold' }}>₹19/month</span> 🌸
-            </p>
-          </div>
-        )}
-      </div>
-
+      </main >
       <style jsx global>{`
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(20px); }
@@ -177,6 +208,6 @@ export default function Home() {
           100% { opacity: 0.6; transform: scale(0.95); }
         }
       `}</style>
-    </main >
+    </>
   );
 }

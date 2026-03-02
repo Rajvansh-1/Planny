@@ -44,44 +44,50 @@ export async function GET() {
 
           const todayTasksHtml = todayTasks.length > 0
             ? `
-              <div style="margin: 16px 0;">
-                <p style="color:#555; font-size:15px; margin:0 0 10px;"><strong>📋 Your tasks today (${completedCount}/${todayTasks.length} done):</strong></p>
+              <div style="margin: 24px 0;">
+                <p style="color: #2d1b2e; font-size: 20px; margin: 0 0 20px; font-weight: 800; text-transform: none; letter-spacing: -0.01em;">🌸 Your wins today (${completedCount}/${todayTasks.length} done)</p>
                 ${todayTasks.map((t: any) => `
-                  <div style="display:flex; align-items:center; gap:10px; padding:10px 14px; margin-bottom:6px; background:${t.completed ? 'rgba(52,211,153,0.08)' : '#fff8fc'}; border-radius:8px; border-left:3px solid ${t.completed ? '#34d399' : '#e5e7eb'};">
-                    <span style="font-size:16px;">${t.completed ? '✅' : '⬜'}</span>
-                    <span style="color:${t.completed ? '#9ca3af' : '#374151'}; text-decoration:${t.completed ? 'line-through' : 'none'}; font-size:15px;">${t.content}</span>
+                  <div style="display: flex; align-items: flex-start; gap: 16px; padding: 20px; margin-bottom: 12px; background: #ffffff; border-radius: 24px; border: 1px solid rgba(45,27,46,0.06); box-shadow: 0 4px 12px rgba(45,27,46,0.03); border-left: 6px solid ${t.completed ? '#f472b6' : '#cbd5e1'};">
+                    <span style="font-size: 22px; margin-top: 2px;">${t.completed ? '✨' : '⬜'}</span>
+                    <span style="color: ${t.completed ? '#9ca3af' : '#2d1b2e'}; text-decoration: ${t.completed ? 'line-through' : 'none'}; font-size: 18px; font-weight: 700; line-height: 1.4;">${t.content}</span>
                   </div>
                 `).join('')}
               </div>
             `
-            : `<p style="color:#aaa; font-style:italic; font-size:14px; margin:12px 0;">No tasks were planned for today.</p>`;
+            : `<div style="text-align: center; padding: 40px 24px; background: rgba(255,255,255,0.6); border-radius: 24px; border: 2px dashed rgba(45,27,46,0.1); margin: 32px 0;">
+                 <p style="color: #64748b; font-style: italic; font-size: 18px; font-weight: 600; margin: 0;">No tasks were planned for today. 🍃</p>
+               </div>`;
 
           const result = await sendEmail({
             to: user.email,
             subject: `🌙 Planny check-in – How was your day, ${firstName}?`,
             html: `
-              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                <div style="background: linear-gradient(135deg, #c9a0dc, #a78bfa); padding: 32px; border-radius: 16px 16px 0 0; text-align: center;">
-                  <h1 style="color: white; margin: 0; font-size: 24px;">Good evening, ${firstName}! 🌙</h1>
-                  <p style="color: rgba(255,255,255,0.85); margin: 8px 0 0; font-size: 15px;">Time for your nightly Planny check-in</p>
-                </div>
-                
-                <div style="background: white; padding: 28px; border: 1px solid #f3e8ff;">
-                  ${todayTasksHtml}
+              <div style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #fff8f6; padding: 40px 20px; border-radius: 32px;">
+                <div style="background-color: #ffffff; border-radius: 32px; border: 1px solid rgba(255,255,255,0.8); overflow: hidden; box-shadow: 0 24px 50px rgba(45,27,46,0.05), 0 4px 12px rgba(244,114,182,0.05);">
+                  
+                  <div style="background: linear-gradient(135deg, rgba(244,114,182,0.1), rgba(253,224,217,0.4)); padding: 48px 32px; text-align: center; border-bottom: 1px solid rgba(244,114,182,0.1);">
+                    <div style="display: inline-block; background: white; padding: 16px; border-radius: 24px; border: 2px solid rgba(255,255,255,0.8); box-shadow: 0 8px 24px rgba(45,27,46,0.06); margin-bottom: 24px;">
+                      <img src="${SITE_URL}/planny-logo.png" alt="Planny" style="width: 56px; height: 56px; object-fit: contain; display: block;" />
+                    </div>
+                    <h1 style="color: #2d1b2e; margin: 0 0 12px; font-size: 32px; font-weight: 900; letter-spacing: -0.03em;">Good evening, ${firstName}! 🌙</h1>
+                    <p style="color: #64748b; margin: 0; font-size: 18px; font-weight: 500;">Time for your nightly check-in.</p>
+                  </div>
+                  
+                  <div style="padding: 40px 32px;">
+                    ${todayTasksHtml}
 
-                  <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid #f3f4f6;">
-                    <p style="color: #555; font-size: 16px; font-weight: bold; margin: 0 0 8px;">✨ Now, plan your tomorrow!</p>
-                    <p style="color: #777; font-size: 14px; margin: 0 0 20px;">It takes less than 2 minutes. Tap below to add your goals for tomorrow.</p>
-                    <div style="text-align: center;">
-                      <a href="${planUrl}" style="display:inline-block; background: linear-gradient(135deg, #c9a0dc, #a78bfa); color: white; padding: 14px 32px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 16px; box-shadow: 0 4px 15px rgba(167,139,250,0.35);">
+                    <div style="margin-top: 48px; padding-top: 36px; border-top: 1px solid rgba(45,27,46,0.06); text-align: center;">
+                      <h2 style="color: #2d1b2e; font-size: 26px; font-weight: 800; margin: 0 0 16px; letter-spacing: -0.02em;">Ready for tomorrow? ✨</h2>
+                      <p style="color: #64748b; font-size: 17px; margin: 0 0 36px; font-weight: 500; line-height: 1.5;">Set your intentions. Keep them small, make them count.</p>
+                      
+                      <a href="${planUrl}" style="display: inline-block; background: #f472b6; color: white; padding: 18px 40px; border-radius: 9999px; text-decoration: none; font-weight: 700; font-size: 18px; box-shadow: 0 8px 20px rgba(244,114,182,0.3); transition: all 0.3s ease;">
                         Plan My Tomorrow 🌸
                       </a>
                     </div>
                   </div>
                 </div>
-
-                <div style="background: #faf5ff; padding: 16px; border-radius: 0 0 16px 16px; text-align: center;">
-                  <p style="color: #aaa; font-size: 12px; margin: 0;">See you in the morning with your daily digest! ☀️</p>
+                <div style="text-align: center; margin-top: 32px;">
+                  <p style="color: #a1a1aa; font-size: 15px; font-weight: 500; margin: 0;">See you in the morning with your daily digest! ☀️</p>
                 </div>
               </div>
             `

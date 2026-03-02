@@ -5,7 +5,7 @@ import {
   format, addMonths, subMonths, startOfMonth, endOfMonth,
   eachDayOfInterval, isSameMonth, isSameDay, startOfWeek, endOfWeek
 } from 'date-fns';
-import { ChevronLeft, ChevronRight, CheckCircle2, Circle, Calendar as CalendarIcon, ArrowLeft } from 'lucide-react';
+import { ChevronLeft, ChevronRight, CheckCircle2, Circle, Calendar as CalendarIcon, ArrowLeft, Loader2, Sparkles } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 type Task = {
@@ -19,6 +19,8 @@ export default function CalendarClient({ tasks }: { tasks: Task[] }) {
   const router = useRouter();
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [loadingTasks, setLoadingTasks] = useState<string[]>([]);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -48,149 +50,168 @@ export default function CalendarClient({ tasks }: { tasks: Task[] }) {
   };
 
   return (
-    <main style={{ minHeight: '100vh', padding: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: '#faf5ff', overflowX: 'hidden' }}>
-      <div style={{ width: '100%', maxWidth: '850px', position: 'relative', animation: 'fadeInUp 0.6s ease-out' }}>
+    <>
+      <div className="mesmerizing-bg"></div>
 
-        {/* Navigation Bar */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-          <button
-            onClick={() => router.push('/dashboard')}
-            style={{ background: 'white', border: '1px solid #f9a8d4', borderRadius: '50%', width: '44px', height: '44px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6b7280', fontWeight: 'bold', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', transition: 'all 0.2s', flexShrink: 0 }}
-            title="Go to Dashboard"
-          >
-            <ArrowLeft size={20} />
-          </button>
+      <main style={{ minHeight: '100vh', padding: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', overflowX: 'hidden', position: 'relative', zIndex: 1 }}>
+        <div style={{ width: '100%', maxWidth: '850px', position: 'relative', animation: 'fadeInUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}>
 
-          <button
-            onClick={() => router.push('/plan')}
-            className="btn"
-            style={{ padding: '12px 24px', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 12px rgba(249,168,212,0.4)', borderRadius: '25px' }}
-          >
-            <CalendarIcon size={18} /> Plan Tomorrow
-          </button>
-        </div>
+          {/* Navigation Bar */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+            <button
+              onClick={() => router.push('/dashboard')}
+              style={{ background: 'rgba(255,255,255,0.9)', border: '2px solid rgba(45,27,46,0.08)', borderRadius: '16px', width: '48px', height: '48px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-dark)', fontWeight: '700', boxShadow: 'var(--shadow-sm)', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', flexShrink: 0 }}
+              title="Go to Dashboard"
+              onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = 'var(--shadow-md)'; e.currentTarget.style.borderColor = 'rgba(45,27,46,0.15)'; }}
+              onMouseOut={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'var(--shadow-sm)'; e.currentTarget.style.borderColor = 'rgba(45,27,46,0.08)'; }}
+              onMouseDown={e => { e.currentTarget.style.transform = 'translateY(1px) scale(0.95)'; e.currentTarget.style.boxShadow = 'none'; }}
+            >
+              <ArrowLeft size={24} />
+            </button>
 
-        <div className="calendar-container">
-
-          {/* Calendar Panel */}
-          <div className="glass-panel fade-up" style={{ padding: '24px', display: 'flex', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-              <button onClick={prevMonth} className="nav-btn">
-                <ChevronLeft size={24} />
-              </button>
-              <h2 style={{ fontSize: '1.3rem', color: '#1f2937', margin: 0, fontWeight: '800', letterSpacing: '-0.01em' }}>
-                {format(currentMonth, 'MMMM yyyy')}
-              </h2>
-              <button onClick={nextMonth} className="nav-btn">
-                <ChevronRight size={24} />
-              </button>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '8px', textAlign: 'center', marginBottom: '12px' }}>
-              {days.map(day => (
-                <div key={day} style={{ color: '#9ca3af', fontWeight: 'bold', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{day}</div>
-              ))}
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '6px' }}>
-              {calendarDays.map((day, idx) => {
-                const isSelected = isSameDay(day, selectedDate);
-                const isCurrentMonth = isSameMonth(day, currentMonth);
-                const dayHasTasks = hasTasks(day);
-
-                return (
-                  <div
-                    key={idx}
-                    onClick={() => setSelectedDate(day)}
-                    className="calendar-day"
-                    style={{
-                      aspectRatio: '1',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      cursor: 'pointer',
-                      borderRadius: '14px',
-                      background: isSelected ? 'linear-gradient(135deg, #fbcfe8, #f9a8d4)' : 'rgba(255,255,255,0.8)',
-                      border: isSelected ? 'none' : '2px solid transparent',
-                      color: isSelected ? 'white' : (isCurrentMonth ? '#4b5563' : '#d1d5db'),
-                      fontWeight: isSelected ? 'bold' : '600',
-                      boxShadow: isSelected ? '0 4px 12px rgba(249,168,212,0.5)' : '0 2px 6px rgba(0,0,0,0.02)',
-                      transition: 'all 0.2s',
-                      position: 'relative',
-                    }}
-                  >
-                    <span style={{ fontSize: '15px' }}>{format(day, dateFormat)}</span>
-                    {dayHasTasks && (
-                      <div style={{ width: '6px', height: '6px', background: isSelected ? 'white' : '#f9a8d4', borderRadius: '50%', marginTop: '4px', boxShadow: isSelected ? '0 0 4px rgba(255,255,255,0.8)' : 'none' }}></div>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
+            <button
+              onClick={() => {
+                setIsNavigating(true);
+                router.push('/plan');
+              }}
+              className="btn"
+              disabled={isNavigating}
+              style={{ padding: '12px 24px', fontSize: '1.15rem', gap: '8px', zIndex: 10 }}
+            >
+              {isNavigating ? <Sparkles size={20} className="spinner" /> : <Sparkles size={20} />}
+              {isNavigating ? 'Opening...' : 'Plan Tomorrow'}
+            </button>
           </div>
 
-          {/* Task List Panel */}
-          <div className="glass-panel fade-up task-panel" style={{ padding: '24px', display: 'flex', flexDirection: 'column', height: '100%' }}>
-            <div style={{ borderBottom: '2px solid rgba(249,168,212,0.2)', paddingBottom: '16px', marginBottom: '20px' }}>
-              <h3 style={{ fontSize: '1.4rem', color: '#1f2937', marginBottom: '6px', fontWeight: '800' }}>
-                {format(selectedDate, 'EEEE, MMMM do')}
-              </h3>
-              <p style={{ color: '#6b7280', fontSize: '1rem', margin: 0, fontWeight: '500' }}>
-                {selectedTasks.length} {selectedTasks.length === 1 ? 'task' : 'tasks'} planned
-              </p>
-            </div>
+          <div className="calendar-container">
 
-            <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px', paddingRight: '4px' }}>
-              {selectedTasks.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '60px 20px', color: '#9ca3af', fontStyle: 'italic', background: 'rgba(255,255,255,0.4)', borderRadius: '16px', border: '2px dashed #fbcfe8' }}>
-                  No tasks planned for this day. 🍃
-                </div>
-              ) : (
-                selectedTasks.map(task => (
-                  <div key={task.id} style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', background: 'white', padding: '18px', borderRadius: '16px', borderLeft: `5px solid ${task.completed ? '#34d399' : '#fbcfe8'}`, boxShadow: '0 4px 12px rgba(0,0,0,0.03)', transition: 'transform 0.2s', animation: 'fadeIn 0.4s ease-out forwards' }}>
+            {/* Calendar Panel */}
+            <div className="glass-panel pop-in" style={{ padding: '32px', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px' }}>
+                <button onClick={prevMonth} className="nav-btn">
+                  <ChevronLeft size={24} />
+                </button>
+                <h2 style={{ fontSize: '1.4rem', color: 'var(--text-dark)', margin: 0, fontWeight: '700', letterSpacing: '-0.01em' }}>
+                  {format(currentMonth, 'MMMM yyyy')}
+                </h2>
+                <button onClick={nextMonth} className="nav-btn">
+                  <ChevronRight size={24} />
+                </button>
+              </div>
 
-                    {/* Interactive Checkbox */}
-                    <button
-                      onClick={async () => {
-                        // Immediately toggle locally (for visual feedback)
-                        const newCompleted = !task.completed;
-                        task.completed = newCompleted;
-                        // Note: For a true instant update we should use state, but since these are passed via props, 
-                        // we force a hard refresh via router.refresh() after the API call finishes.
-                        const btn = document.getElementById(`task-btn-${task.id}`);
-                        if (btn) btn.innerHTML = newCompleted ? '✅' : '⭕';
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '8px', textAlign: 'center', marginBottom: '16px' }}>
+                {days.map(day => (
+                  <div key={day} style={{ color: '#94a3b8', fontWeight: '600', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{day}</div>
+                ))}
+              </div>
 
-                        await fetch('/api/tasks', {
-                          method: 'PATCH',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({ taskId: task.id, completed: newCompleted }),
-                        });
-                        router.refresh();
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '8px' }}>
+                {calendarDays.map((day, idx) => {
+                  const isSelected = isSameDay(day, selectedDate);
+                  const isCurrentMonth = isSameMonth(day, currentMonth);
+                  const dayHasTasks = hasTasks(day);
+
+                  return (
+                    <div
+                      key={idx}
+                      onClick={() => setSelectedDate(day)}
+                      style={{
+                        aspectRatio: '1',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        cursor: 'pointer',
+                        borderRadius: '16px',
+                        background: isSelected ? 'var(--text-dark)' : 'transparent',
+                        color: isSelected ? 'white' : (isCurrentMonth ? 'var(--text-dark)' : '#cbd5e1'),
+                        fontWeight: isSelected ? '800' : '600',
+                        transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                        position: 'relative',
+                        transform: isSelected ? 'scale(1.05)' : 'scale(1)',
+                        boxShadow: isSelected ? '0 8px 16px rgba(45, 27, 46, 0.2)' : 'none'
                       }}
-                      id={`task-btn-${task.id}`}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0', flexShrink: 0, marginTop: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                      onMouseOver={e => { if (!isSelected) { e.currentTarget.style.background = 'rgba(255,255,255,0.6)'; e.currentTarget.style.transform = 'scale(1.1)'; } }}
+                      onMouseOut={e => { if (!isSelected) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.transform = 'scale(1)'; } }}
+                      onMouseDown={e => { if (!isSelected) { e.currentTarget.style.transform = 'scale(0.95)'; } }}
                     >
-                      {task.completed ? (
-                        <CheckCircle2 size={24} color="#34d399" />
-                      ) : (
-                        <Circle size={24} color="#d1d5db" />
+                      <span style={{ fontSize: '1.15rem' }}>{format(day, dateFormat)}</span>
+                      {dayHasTasks && (
+                        <div style={{ width: '6px', height: '6px', background: isSelected ? 'rgba(255,255,255,0.9)' : 'var(--accent)', borderRadius: '50%', marginTop: '4px' }}></div>
                       )}
-                    </button>
-
-                    <span style={{ color: task.completed ? '#9ca3af' : '#374151', textDecoration: task.completed ? 'line-through' : 'none', lineHeight: '1.5', fontSize: '16px', fontWeight: '500' }}>
-                      {task.content}
-                    </span>
-                  </div>
-                ))
-              )}
+                    </div>
+                  )
+                })}
+              </div>
             </div>
+
+            {/* Task List Panel */}
+            <div className="glass-panel pop-in task-panel" style={{ padding: '32px', display: 'flex', flexDirection: 'column', height: '100%', animationDelay: '0.1s' }}>
+              <div style={{ borderBottom: '2px solid rgba(45,27,46,0.08)', paddingBottom: '20px', marginBottom: '24px' }}>
+                <h3 style={{ fontSize: '1.5rem', color: 'var(--text-dark)', marginBottom: '8px', fontWeight: '800', letterSpacing: '-0.02em' }}>
+                  {format(selectedDate, 'EEEE, MMMM do')}
+                </h3>
+                <p style={{ color: '#64748b', fontSize: '1.05rem', margin: 0, fontWeight: '500' }}>
+                  {selectedTasks.length} {selectedTasks.length === 1 ? 'task' : 'tasks'} planned
+                </p>
+              </div>
+
+              <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px', paddingRight: '4px' }}>
+                {selectedTasks.length === 0 ? (
+                  <div style={{ textAlign: 'center', padding: '60px 24px', color: '#94a3b8', fontStyle: 'italic', background: 'rgba(255,255,255,0.6)', borderRadius: '24px', border: '2px dashed rgba(45,27,46,0.1)' }}>
+                    <span style={{ fontSize: '1.15rem', fontWeight: '600' }}>No tasks planned for this day. 🍃</span>
+                  </div>
+                ) : (
+                  selectedTasks.map(task => (
+                    <div key={task.id} style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', background: task.completed ? 'rgba(255,255,255,0.4)' : 'white', padding: '24px', borderRadius: '24px', border: task.completed ? '1px solid rgba(255,255,255,0.5)' : '2px solid rgba(45,27,46,0.06)', boxShadow: task.completed ? 'none' : 'var(--shadow-sm)', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', animation: 'fadeUp 0.3s ease-out forwards', opacity: task.completed ? 0.6 : 1 }} onMouseOver={e => { if (!task.completed) { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = 'var(--shadow-md)'; e.currentTarget.style.borderColor = 'rgba(45,27,46,0.15)'; } }} onMouseOut={e => { if (!task.completed) { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'var(--shadow-sm)'; e.currentTarget.style.borderColor = 'rgba(45,27,46,0.06)'; } }}>
+
+
+                      {/* Interactive Checkbox */}
+                      <button
+                        onClick={async () => {
+                          if (loadingTasks.includes(task.id)) return;
+                          setLoadingTasks(prev => [...prev, task.id]);
+
+                          const newCompleted = !task.completed;
+                          task.completed = newCompleted;
+
+                          await fetch('/api/tasks', {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ taskId: task.id, completed: newCompleted }),
+                          });
+
+                          setLoadingTasks(prev => prev.filter(id => id !== task.id));
+                          router.refresh();
+                        }}
+                        style={{ background: 'none', border: 'none', cursor: loadingTasks.includes(task.id) ? 'not-allowed' : 'pointer', padding: '4px', flexShrink: 0, marginTop: '0', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: loadingTasks.includes(task.id) ? 0.5 : 1, transition: 'transform 0.1s ease' }}
+                        disabled={loadingTasks.includes(task.id)}
+                        onMouseOver={e => e.currentTarget.style.transform = 'scale(1.15) rotate(5deg)'}
+                        onMouseOut={e => e.currentTarget.style.transform = 'scale(1) rotate(0)'}
+                        onMouseDown={e => e.currentTarget.style.transform = 'scale(0.9)'}
+                      >
+                        {loadingTasks.includes(task.id) ? (
+                          <Loader2 size={28} color="var(--text-dark)" className="spinner" />
+                        ) : task.completed ? (
+                          <CheckCircle2 size={32} style={{ color: '#10b981' }} />
+                        ) : (
+                          <Circle size={32} style={{ color: '#94a3b8' }} />
+                        )}
+                      </button>
+
+                      <span style={{ flex: 1, color: task.completed ? '#cbd5e1' : 'var(--text-dark)', textDecoration: task.completed ? 'line-through' : 'none', lineHeight: '1.4', fontSize: '1.15rem', fontWeight: '700', transition: 'all 0.3s ease', wordBreak: 'break-word', whiteSpace: 'pre-wrap', paddingTop: '2px' }}>
+                        {task.content}
+                      </span>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
           </div>
-
         </div>
-      </div>
 
-      <style jsx global>{`
+        <style jsx global>{`
         .calendar-container {
           display: grid;
           grid-template-columns: 1fr 1fr;
@@ -207,40 +228,32 @@ export default function CalendarClient({ tasks }: { tasks: Task[] }) {
         }
 
         .nav-btn {
-          background: rgba(255,255,255,0.6);
-          border: 1px solid rgba(249,168,212,0.3);
-          border-radius: 50%;
-          width: 40px;
-          height: 40px;
+          background: rgba(255,255,255,0.9);
+          border: 2px solid rgba(45,27,46,0.08);
+          border-radius: 16px;
+          width: 44px;
+          height: 44px;
           display: flex;
           align-items: center;
           justify-content: center;
           cursor: pointer;
-          color: #6b7280;
-          transition: all 0.2s;
+          color: var(--text-dark);
+          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+          box-shadow: var(--shadow-sm);
         }
         .nav-btn:hover {
-          background: white;
-          color: #f9a8d4;
-          box-shadow: 0 4px 10px rgba(249,168,212,0.2);
-          transform: translateY(-1px);
+          background: #fff0f5;
+          transform: translateY(-4px);
+          box-shadow: var(--shadow-md);
+          border-color: rgba(244,114,182,0.3);
+          color: var(--accent);
         }
-
-        .calendar-day:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 12px rgba(0,0,0,0.06) !important;
-          border-color: #fbcfe8 !important;
-        }
-
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+        .nav-btn:active {
+          transform: translateY(1px);
+          box-shadow: none;
         }
       `}</style>
-    </main>
+      </main>
+    </>
   );
 }
