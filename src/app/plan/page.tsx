@@ -181,8 +181,8 @@ function PlanForm() {
 
       <div className="glass-panel pop-in" style={{ maxWidth: '650px', width: '100%', flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', marginTop: '1rem', padding: '40px 32px' }}>
 
-        {/* Navigation / Back Button */}
-        <div style={{ position: 'absolute', top: '24px', left: '24px', display: 'flex', alignItems: 'center', gap: '16px', zIndex: 10 }}>
+        {/* Top Header Row */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '32px' }}>
           <button
             onClick={() => router.push('/dashboard')}
             style={{ background: 'rgba(255,255,255,0.9)', border: '2px solid rgba(45,27,46,0.08)', borderRadius: '16px', width: '48px', height: '48px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-dark)', fontWeight: '700', boxShadow: 'var(--shadow-sm)', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', flexShrink: 0 }}
@@ -193,18 +193,17 @@ function PlanForm() {
           >
             <ArrowLeft size={24} />
           </button>
-          <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <span style={{ fontSize: '13px', background: 'linear-gradient(135deg, rgba(244,114,182,0.15), rgba(253,224,217,0.4))', border: '1px solid rgba(244,114,182,0.2)', color: 'var(--accent)', padding: '6px 16px', borderRadius: '40px', fontWeight: '800', letterSpacing: '0.05em', boxShadow: 'var(--shadow-sm)' }}>PLANNING 🎯</span>
-              <img src="/planny-logo.png" alt="Planny" style={{ width: '48px', height: '48px', objectFit: 'contain', background: 'white', borderRadius: '16px', padding: '8px', border: '2px solid rgba(255,255,255,0.8)', boxShadow: 'var(--shadow-sm)' }} />
-            </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '13px', background: 'linear-gradient(135deg, rgba(244,114,182,0.15), rgba(253,224,217,0.4))', border: '1px solid rgba(244,114,182,0.2)', color: 'var(--accent)', padding: '6px 16px', borderRadius: '40px', fontWeight: '800', letterSpacing: '0.05em', boxShadow: 'var(--shadow-sm)' }}>PLANNING 🎯</span>
+            <img src="/planny-logo.png" alt="Planny" style={{ width: '40px', height: '40px', objectFit: 'contain', background: 'white', borderRadius: '12px', padding: '6px', border: '2px solid rgba(255,255,255,0.8)', boxShadow: 'var(--shadow-sm)' }} />
           </div>
         </div>
 
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '36px', marginTop: '16px' }}>
+        {/* Title Section */}
+        <div style={{ textAlign: 'center', marginBottom: '36px' }}>
           <h1 className="text-glow" style={{ fontSize: '2.4rem', margin: '0 0 8px', lineHeight: '1.2', fontWeight: '800', letterSpacing: '-0.02em' }}>Plan Tomorrow ✨</h1>
-          <p style={{ color: '#64748b', margin: 0, fontSize: '1.1rem', fontWeight: '400' }}>
+          <p style={{ color: '#64748b', margin: 0, fontSize: '1.1rem', fontWeight: '500' }}>
             {loading ? 'Waking up your list...' : tasks.length > 0
               ? <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>You did {completedCount}/{tasks.length} tasks today! {completedCount === tasks.length && completedCount > 0 ? <PartyPopper size={20} style={{ color: 'var(--accent)', animation: 'popIn 0.5s ease-out' }} /> : ''}</span>
               : 'Add your goals for tomorrow below'}
