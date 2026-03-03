@@ -11,7 +11,7 @@ type Props = {
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const params = await searchParams;
   const email = params.email as string | undefined;
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://planny.vercel.app';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://planny-mu.vercel.app';
 
   // Build personalized name from email prefix if available
   const rawName = email?.split('@')[0] ?? '';

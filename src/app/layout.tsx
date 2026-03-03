@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_BASE_URL || 'https://planny-mu.vercel.app'
   ),
   title: {
-    default: 'Planny 🐾 | Your Cute AI Daily Scheduler',
+    default: 'Planny 🐾 | Your AI Daily Scheduler',
     template: '%s | Planny 🐾',
   },
   description:
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     'goal tracker',
     'planny',
   ],
-  authors: [{ name: 'Planny', url: 'https://planny.vercel.app' }],
+  authors: [{ name: 'Planny', url: 'https://planny-mu.vercel.app' }],
   creator: 'Planny',
   publisher: 'Planny',
   category: 'productivity',
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
   // ─── Twitter / X Card ────────────────────────────────────────────────────────
   twitter: {
     card: 'summary',
-    title: 'Planny 🐾 | Your Cute AI Daily Scheduler',
+    title: 'Planny 🐾 | Your AI Daily Scheduler',
     description:
       'AI-powered daily planner with 10 PM check-ins & 7 AM digests. Build habits, crush goals.',
     images: ['/planny-logo.png'],
