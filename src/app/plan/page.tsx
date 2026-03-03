@@ -20,8 +20,8 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     : null;
 
   const title = displayName
-    ? `${displayName}'s Plan | Planny 🐾`
-    : 'Plan Tomorrow | Planny 🐾';
+    ? `${displayName}'s Tomorrow Plan | Planny 🐾`
+    : 'Plan Your Tomorrow | Planny 🐾 AI Scheduler';
 
   const description = displayName
     ? `Check out what ${displayName} is planning for tomorrow with Planny — the AI daily scheduler.`
@@ -37,20 +37,22 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
       siteName: 'Planny',
       images: [
         {
-          url: `${baseUrl}/planny-logo.png`,
-          width: 512,
-          height: 512,
-          alt: displayName ? `${displayName}'s Planny` : 'Planny AI Scheduler',
+          url: displayName
+            ? `${baseUrl}/api/og?name=${encodeURIComponent(displayName)}`
+            : `${baseUrl}/api/og`,
+          width: 1200,
+          height: 630,
+          alt: displayName ? `${displayName}'s Planny Plan` : 'Planny AI Scheduler',
           type: 'image/png',
         },
       ],
       type: 'website',
     },
     twitter: {
-      card: 'summary',
+      card: 'summary_large_image',
       title,
       description,
-      images: [`${baseUrl}/planny-logo.png`],
+      images: [displayName ? `${baseUrl}/api/og?name=${encodeURIComponent(displayName)}` : `${baseUrl}/api/og`],
       creator: '@plannyapp',
     },
   };

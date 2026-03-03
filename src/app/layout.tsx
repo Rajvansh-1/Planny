@@ -24,11 +24,11 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_BASE_URL || 'https://planny-mu.vercel.app'
   ),
   title: {
-    default: 'Planny 🐾 | Your AI Daily Scheduler',
+    default: 'Planny 🐾 | AI Scheduler — Build Better Daily Habits',
     template: '%s | Planny 🐾',
   },
   description:
-    'Planny is the AI-powered daily planner that sends you a 10 PM evening check-in and 7 AM morning digest. Build habits, achieve goals, and wake up inspired every day.',
+    'Planny sends you a 7 AM morning digest and 10 PM evening check-in powered by AI. Build habits, crush goals, wake up inspired — every single day.',
   applicationName: 'Planny',
   keywords: [
     'AI scheduler',
@@ -56,15 +56,15 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: '/',
     siteName: 'Planny',
-    title: 'Planny 🐾 | Your Cute AI Daily Scheduler',
+    title: 'Planny 🐾 | AI Scheduler — Build Better Daily Habits',
     description:
-      'Get a 10 PM evening check-in & 7 AM morning digest powered by AI. Build habits and wake up inspired every single day.',
+      'Get a 7 AM morning digest & 10 PM evening check-in powered by AI. Build habits, crush goals, and wake up inspired every day.',
     images: [
       {
-        url: '/planny-logo.png',
-        width: 512,
-        height: 512,
-        alt: 'Planny — AI Daily Scheduler',
+        url: '/api/og',
+        width: 1200,
+        height: 630,
+        alt: 'Planny — AI Daily Scheduler: Build Better Habits',
         type: 'image/png',
       },
     ],
@@ -72,11 +72,11 @@ export const metadata: Metadata = {
 
   // ─── Twitter / X Card ────────────────────────────────────────────────────────
   twitter: {
-    card: 'summary',
-    title: 'Planny 🐾 | Your AI Daily Scheduler',
+    card: 'summary_large_image',
+    title: 'Planny 🐾 | AI Scheduler — Build Better Daily Habits',
     description:
-      'AI-powered daily planner with 10 PM check-ins & 7 AM digests. Build habits, crush goals.',
-    images: ['/planny-logo.png'],
+      'AI daily planner with 7 AM digests & 10 PM check-ins. Build habits, crush goals — free 20-day trial.',
+    images: ['/api/og'],
     creator: '@plannyapp',
     site: '@plannyapp',
   },
