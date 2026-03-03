@@ -8,7 +8,7 @@ import { generateMorningQuote } from '@/lib/ai';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60; // Allow maximum Vercel Hobby execution time
 
-const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000').replace(/\/$/, '');
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://planny-mu.vercel.app').replace(/\/$/, '');
 
 export async function GET() {
   try {

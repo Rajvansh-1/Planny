@@ -5,7 +5,7 @@ import { sendEmail } from '@/lib/email';
 
 export const dynamic = 'force-dynamic';
 
-const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000').replace(/\/$/, '');
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://planny-mu.vercel.app').replace(/\/$/, '');
 
 export async function POST(req: Request) {
   try {
