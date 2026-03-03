@@ -1,40 +1,48 @@
 <div align="center">
 
-<img src="public/planny-logo.png" width="300" alt="Planny Logo" />
+<img src="public/planny-logo.png" width="220" alt="Planny Logo" />
 
-# Planny
+# Planny 🐾
 
-**Your cute, magical AI productivity assistant.**  
-Planny checks in every night to learn your goals — and delivers a personalized, motivational plan to your inbox every morning.
+**Your AI-powered daily scheduler — beautifully delivered to your inbox.**
 
-[![Live App](https://img.shields.io/badge/Live%20App-planny.app-f9a8d4?style=for-the-badge&logo=vercel&logoColor=white)](https://planny-mu.vercel.app)
-[![Built with Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
-[![Powered by Groq AI](https://img.shields.io/badge/AI-Groq-orange?style=for-the-badge)](https://groq.com)
+[![Live App](https://img.shields.io/badge/Try%20Planny-Free%2020%20Days-f9a8d4?style=for-the-badge&logo=vercel&logoColor=white)](https://planny-mu.vercel.app)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
+[![Groq AI](https://img.shields.io/badge/AI-Groq%20%2F%20Llama3-orange?style=for-the-badge)](https://groq.com)
+[![Razorpay](https://img.shields.io/badge/Payments-Razorpay-02042B?style=for-the-badge&logo=razorpay)](https://razorpay.com)
 
 </div>
----
 
+---
 
 ## ✨ What is Planny?
 
-Planny is a **paid AI productivity SaaS** that automates your daily planning with the power of AI. Every night at **10 PM**, Planny sends you an email to collect your tasks and goals for the next day. Every morning at **7 AM**, it delivers a beautifully formatted, AI-generated plan with a motivational quote — straight to your inbox.
+Planny is an **AI-powered daily planning SaaS** that works entirely through your inbox.
 
-No manual setup. No complicated apps. Just smart, automated planning that feels like magic. 🌸
+- 🌙 **Every night at 10 PM** — Planny emails you to check off today's tasks and plan what you want to achieve tomorrow.
+- ☀️ **Every morning at 7 AM** — Wake up to a beautiful digest: your task list + a fresh AI-generated motivational quote.
+
+No complicated dashboard. No app to open. Just smart, automated planning that feels like magic. 🌸
+
+**Free for 20 days → ₹19/month after that.**
 
 ---
 
-## 🚀 Core Features
+## 🚀 Features
 
-| Feature | Description |
-|---|---|
-| 🌙 **10 PM Evening Check-in** | Automated email asks what you want to achieve tomorrow |
-| ☀️ **7 AM Morning Digest** | AI-crafted schedule + motivational quote delivered to your inbox |
-| 📅 **Interactive Calendar** | Visual calendar view to track tasks and plans across days |
-| 🔐 **Google Sign-In** | One-click authentication via Google OAuth — no passwords needed |
-| 🤖 **Groq AI Engine** | Ultra-fast AI generates your daily plan using the Llama model |
-| 📬 **Smart Email Automation** | Beautiful HTML emails via Nodemailer with personalized content |
-| 🌍 **Timezone-Aware** | Schedule delivery is calibrated to each user's local timezone |
-| ✉️ **Email Waitlist** | Let users join a waitlist before onboarding — no friction |
+| | Feature | What it does |
+|---|---|---|
+| 🌙 | **Evening Check-in** | 10 PM email with tap-to-complete task checkboxes |
+| ☀️ | **Morning Digest** | AI-generated quote + your task list for the day |
+| 📅 | **Interactive Calendar** | Click any date to view, add, or check off tasks |
+| ✅ | **Email Checkbox Toggle** | Mark tasks done directly from your inbox |
+| 🤖 | **Groq AI Engine** | Llama 3-powered quotes and personalized messages |
+| 🔐 | **Google Sign-In** | One-click OAuth — no passwords |
+| 💳 | **Razorpay Payments** | Smooth trial-to-paid subscription flow |
+| 📱 | **PWA-Ready** | Add to Home Screen — works on slow connections |
+| 🖼️ | **Dynamic OG Images** | Branded 1200×630 preview cards for every shared link |
+| 🌍 | **Timezone-Aware** | Emails land at the right time for every user |
+| 🔍 | **Production SEO** | OpenGraph, Twitter cards, JSON-LD schema, sitemap, robots.txt |
 
 ---
 
@@ -42,71 +50,62 @@ No manual setup. No complicated apps. Just smart, automated planning that feels 
 
 | Layer | Technology |
 |---|---|
-| **Framework** | [Next.js 16](https://nextjs.org) (App Router) + TypeScript |
-| **Frontend** | React 19, TailwindCSS 4 |
-| **Auth** | [NextAuth.js v4](https://next-auth.js.org) with Google OAuth + Prisma Adapter |
+| **Framework** | [Next.js 16](https://nextjs.org) — App Router, Server Components, Edge Functions |
+| **Language** | TypeScript |
+| **Frontend** | React 19, Vanilla CSS (custom design system) |
+| **Auth** | [NextAuth.js v4](https://next-auth.js.org) — Google OAuth + Prisma Adapter |
 | **Database** | PostgreSQL via [Prisma ORM](https://www.prisma.io) + Prisma Accelerate |
-| **AI** | [Groq SDK](https://groq.com) — Llama 3 for plan & quote generation |
-| **Email** | [Nodemailer](https://nodemailer.com) for transactional email delivery |
-| **Cron Jobs** | [Vercel Cron Jobs](https://vercel.com/docs/cron-jobs) for scheduled tasks |
-| **Deployment** | [Vercel](https://vercel.com) — edge-optimized, serverless |
+| **AI** | [Groq SDK](https://groq.com) — Llama 3.3 70B |
+| **Email** | [Nodemailer](https://nodemailer.com) via Gmail SMTP |
+| **Payments** | [Razorpay](https://razorpay.com) — subscriptions + webhook verification |
+| **Image Gen** | Next.js `ImageResponse` Edge API — dynamic OG cards |
+| **Cron Jobs** | [Vercel Cron Jobs](https://vercel.com/docs/cron-jobs) — 7 AM & 10 PM |
+| **Hosting** | [Vercel](https://vercel.com) — serverless, globally distributed |
 
 ---
 
 ## 🔄 How It Works
 
 ```
-User signs in → adds tasks for tomorrow
-          ↓
-   [10 PM Cron Job]
-   Planny emails every user → "What are your goals for tomorrow?"
-          ↓
-   User clicks link → fills in their task list (web form)
-          ↓
-   [7 AM Cron Job]
-   Groq AI reads tasks → generates a personalized daily plan + quote
-   Planny sends the beautiful morning email 🌅
-          ↓
-   User opens calendar → views their planned day
+User signs up with Google → 20-day free trial starts
+         ↓
+  [10 PM — Evening Check-in]
+  Planny emails today's tasks with tap-to-complete checkboxes
+  User plans tomorrow via web or calendar
+         ↓
+  [7 AM — Morning Digest]
+  Groq AI generates a motivational quote
+  Planny sends a beautiful digest with today's task list 🌅
+         ↓
+  User opens calendar → add & check off tasks for any date
 ```
 
 ---
 
-## 📸 App Screens
+## 🌐 Live App
 
-| Landing Page | Plan Form | Calendar View |
-|---|---|---|
-| Sign in with Google or join the waitlist | Add your tasks for tomorrow | View your daily plan visually |
+**[→ planny-mu.vercel.app](https://planny-mu.vercel.app)**
+
+- [Privacy Policy](https://planny-mu.vercel.app/privacy)
+- [Terms of Service](https://planny-mu.vercel.app/terms)
 
 ---
 
-## ⚠️ License & Usage
+## ⚠️ License
 
 > **This is a proprietary, commercially licensed product.**
 
-- 🚫 **Do not clone, fork, or copy** this repository or any part of its source code.
-- 🚫 **Do not redistribute** or republish any portion of this codebase.
-- 🚫 **Do not use** this code to build competing or derivative products.
-- ✅ **Personal use** of the live app at [planny.vercel.app](https://planny-mu.vercel.app/) is subject to our Terms of Service.
+- 🚫 **Do not clone, fork, or copy** this source code.
+- 🚫 **Do not redistribute** or use it to build competing products.
+- ✅ Personal use of the live app is subject to our [Terms of Service](https://planny-mu.vercel.app/terms).
 
-All rights reserved © 2026 Planny. Unauthorized use, reproduction, or distribution of this software is strictly prohibited.
-
----
-
-## 📬 Contact
-
-Have questions, feedback, or partnership inquiries?
-
-
-- **Live App:** [planny.vercel.app](https://planny-mu.vercel.app/)
+All rights reserved © 2026 Planny. Unauthorized use or distribution is strictly prohibited.
 
 ---
 
 <div align="center">
   <sub>Made with 💖 and a little AI magic &nbsp;•&nbsp; © 2026 Planny 🐾</sub>
   <br/><br/>
-  <sub>Designed & Developed by</sub>
-  <br/>
 
   [![Rajvansh](https://img.shields.io/badge/%F0%9F%91%A8%E2%80%8D%F0%9F%92%BB%20Rajvansh-GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Rajvansh-1)
 </div>
