@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /dashboard
+Disallow: /calendar
+Disallow: /payment
+
+# Allow Google to crawl public pages
+User-agent: Googlebot
+Allow: /
+Allow: /plan
+
+Sitemap: https://planny-mu.vercel.app/sitemap.xml

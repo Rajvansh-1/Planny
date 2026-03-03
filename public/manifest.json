@@ -1,0 +1,51 @@
+{
+  "name": "Planny — AI Daily Scheduler",
+  "short_name": "Planny",
+  "description": "Your cute AI daily planner. Get a 10 PM check-in and 7 AM morning digest to build powerful habits.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff8f6",
+  "theme_color": "#f472b6",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "en",
+  "categories": [
+    "productivity",
+    "lifestyle"
+  ],
+  "icons": [
+    {
+      "src": "/planny-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Plan Tomorrow",
+      "short_name": "Plan",
+      "description": "Add tasks for tomorrow",
+      "url": "/dashboard",
+      "icons": [
+        {
+          "src": "/planny-logo.png",
+          "sizes": "512x512"
+        }
+      ]
+    }
+  ]
+}
