@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
-import CalendarClient from "@/components/CalendarClient";
+import CalendarClientWrapper from "@/components/CalendarClientWrapper";
 
 export const dynamic = 'force-dynamic';
 
@@ -34,5 +34,5 @@ export default async function CalendarPage() {
     completed: t.completed,
   }));
 
-  return <CalendarClient tasks={safeTasks} />;
+  return <CalendarClientWrapper tasks={safeTasks} email={session.user.email!} />;
 }
