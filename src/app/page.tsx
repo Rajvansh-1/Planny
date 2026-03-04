@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { CheckCircle2, Moon, Sun, CalendarDays, Sparkles, ArrowRight, Zap } from 'lucide-react';
+import { CheckCircle2, Moon, Sun, CalendarDays, Sparkles, ArrowRight, Zap, BarChart, Bot } from 'lucide-react';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
@@ -171,6 +171,7 @@ export default function Home() {
                 <p style={{ fontSize: '15px', color: '#64748b', margin: 0, lineHeight: '1.4', fontWeight: '500' }}>Reflect & plan tomorrow in 2 mins. True mental clarity.</p>
               </div>
             </div>
+
             <div style={{ padding: '24px', background: 'rgba(255,255,255,0.7)', borderRadius: '32px', border: '1px solid rgba(255,255,255,0.8)', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', display: 'flex', alignItems: 'center', gap: '20px', boxShadow: 'var(--shadow-sm)' }} onMouseOver={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.95)'; e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = 'var(--shadow-md)'; }} onMouseOut={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.7)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'var(--shadow-sm)'; }}>
               <div style={{ background: '#fef3c7', width: '64px', height: '64px', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: '2px solid white', boxShadow: 'var(--shadow-sm)' }}>
                 <Sun style={{ color: '#d97706', fill: '#fbbf24' }} size={32} />
@@ -178,6 +179,26 @@ export default function Home() {
               <div style={{ textAlign: 'left' }}>
                 <h3 style={{ fontSize: '1.25rem', fontWeight: '800', margin: '0 0 4px', color: 'var(--text-dark)' }}>7 AM Digest</h3>
                 <p style={{ fontSize: '15px', color: '#64748b', margin: 0, lineHeight: '1.4', fontWeight: '500' }}>Wake up inspired with your distinct goals & an AI quote.</p>
+              </div>
+            </div>
+
+            <div style={{ padding: '24px', background: 'rgba(255,255,255,0.7)', borderRadius: '32px', border: '1px solid rgba(255,255,255,0.8)', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', display: 'flex', alignItems: 'center', gap: '20px', boxShadow: 'var(--shadow-sm)' }} onMouseOver={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.95)'; e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = 'var(--shadow-md)'; }} onMouseOut={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.7)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'var(--shadow-sm)'; }}>
+              <div style={{ background: '#e0e7ff', width: '64px', height: '64px', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: '2px solid white', boxShadow: 'var(--shadow-sm)' }}>
+                <BarChart style={{ color: '#4f46e5' }} size={32} />
+              </div>
+              <div style={{ textAlign: 'left' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: '800', margin: '0 0 4px', color: 'var(--text-dark)' }}>Weekly Report</h3>
+                <p style={{ fontSize: '15px', color: '#64748b', margin: 0, lineHeight: '1.4', fontWeight: '500' }}>Get a compiled report of your accomplishments every weekend in your inbox.</p>
+              </div>
+            </div>
+
+            <div style={{ padding: '24px', background: 'rgba(255,255,255,0.7)', borderRadius: '32px', border: '1px solid rgba(255,255,255,0.8)', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', display: 'flex', alignItems: 'center', gap: '20px', boxShadow: 'var(--shadow-sm)' }} onMouseOver={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.95)'; e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = 'var(--shadow-md)'; }} onMouseOut={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.7)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'var(--shadow-sm)'; }}>
+              <div style={{ background: '#fce7f3', width: '64px', height: '64px', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: '2px solid white', boxShadow: 'var(--shadow-sm)' }}>
+                <Bot style={{ color: '#db2777' }} size={32} />
+              </div>
+              <div style={{ textAlign: 'left' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: '800', margin: '0 0 4px', color: 'var(--text-dark)' }}>AI Planner</h3>
+                <p style={{ fontSize: '15px', color: '#64748b', margin: 0, lineHeight: '1.4', fontWeight: '500' }}>A personalized AI planner completely adapted for your day-to-day tasks.</p>
               </div>
             </div>
           </div>
