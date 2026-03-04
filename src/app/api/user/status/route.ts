@@ -15,7 +15,7 @@ export async function GET(req: Request) {
     const user = await prisma.user.findUnique({
       where: { email },
       // @ts-ignore
-      select: { isPaid: true, createdAt: true }
+      select: { isPaid: true, createdAt: true, currentStreak: true }
     });
 
     if (!user) return NextResponse.json({ isPaid: false });
@@ -26,7 +26,8 @@ export async function GET(req: Request) {
     const isWithinFreeTrial = user.createdAt > oneDayAgo;
 
     return NextResponse.json({
-      isPaid: true // Beta version: Free for everyone for 20 days
+      isPaid: true, // Beta version: Free for everyone for 20 days
+      currentStreak: user.currentStreak || 0
     });
   } catch (error) {
     console.error(error);

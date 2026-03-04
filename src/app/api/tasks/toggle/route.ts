@@ -36,10 +36,43 @@ export async function GET(request: NextRequest) {
     }
 
     // Toggle the completed state
+    const newCompletedState = !task.completed;
+
     await prisma.task.update({
       where: { id },
-      data: { completed: !task.completed },
+      data: { completed: newCompletedState },
     });
+
+    // If we just completed a task, let's calculate their new streak
+    if (newCompletedState) {
+      const { calculateNewStreak } = await import('@/lib/streak');
+
+      const {
+        newCurrentStreak,
+        newLongestStreak,
+        newLastActiveDate
+      } = calculateNewStreak(
+        user.lastActiveDate,
+        user.currentStreak,
+        user.longestStreak,
+        task.dateFor // The date context of the task they just completed
+      );
+
+      // Only update if something changed to save DB writes
+      if (
+        user.currentStreak !== newCurrentStreak ||
+        user.lastActiveDate !== newLastActiveDate
+      ) {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: {
+            currentStreak: newCurrentStreak,
+            longestStreak: newLongestStreak,
+            lastActiveDate: newLastActiveDate,
+          }
+        });
+      }
+    }
 
     // Redirect back to the plan page so user sees their updated list
     return NextResponse.redirect(

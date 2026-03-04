@@ -21,6 +21,12 @@ model User {
   paidAt        DateTime?
   razorpayOrderId String?
   
+  // New Addictive Features
+  currentStreak      Int       @default(0)
+  longestStreak      Int       @default(0)
+  lastActiveDate     String?   // YYYY-MM-DD format for easy task matching
+  weeklyReportSentAt DateTime? // For Sunday Cron Job
+
   accounts      Account[]
   sessions      Session[]
   tasks         Task[]

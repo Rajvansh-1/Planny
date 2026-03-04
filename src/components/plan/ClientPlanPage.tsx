@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   Plus, Check, Trash2, Loader2, ArrowLeft, CheckCircle2,
-  Circle, CalendarDays, Edit2, PartyPopper,
+  Circle, CalendarDays, Edit2, PartyPopper, Flame
 } from 'lucide-react';
 
 type Task = {
@@ -28,6 +28,7 @@ function PlanForm() {
   const [editText, setEditText] = useState('');
   const [isNavigatingCalendar, setIsNavigatingCalendar] = useState(false);
   const [loadingTasks, setLoadingTasks] = useState<string[]>([]);
+  const [streak, setStreak] = useState<number>(0);
 
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -45,6 +46,11 @@ function PlanForm() {
           router.push(`/payment?email=${encodeURIComponent(email!)}`);
           return;
         }
+
+        if (statusData.currentStreak !== undefined) {
+          setStreak(statusData.currentStreak);
+        }
+
         const res = await fetch(`/api/tasks?email=${encodeURIComponent(email!)}&dateFor=${tomorrowStr}`);
         const data = await res.json();
         if (data.tasks) {
@@ -165,8 +171,22 @@ function PlanForm() {
           </div>
         </div>
 
-        {/* Title */}
-        <div style={{ textAlign: 'center', marginBottom: '36px' }}>
+        {/* Title & Streak Badge */}
+        <div style={{ textAlign: 'center', marginBottom: '36px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          {streak > 0 && (
+            <div className="pop-in" style={{
+              display: 'inline-flex', alignItems: 'center', gap: '8px',
+              background: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%)',
+              padding: '6px 16px', borderRadius: '40px', marginBottom: '16px',
+              border: '2px solid rgba(255,100,100,0.3)', boxShadow: '0 4px 15px rgba(255,154,158,0.3)'
+            }}>
+              <Flame size={20} strokeWidth={2.5} style={{ color: '#e11d48', animation: 'pulse 2s infinite' }} />
+              <span style={{ color: '#9f1239', fontWeight: '800', fontSize: '15px', letterSpacing: '0.05em' }}>
+                {streak} DAY STREAK
+              </span>
+            </div>
+          )}
+
           <h1 className="text-glow" style={{ fontSize: '2.4rem', margin: '0 0 8px', lineHeight: '1.2', fontWeight: '800', letterSpacing: '-0.02em' }}>Plan Tomorrow ✨</h1>
           <p style={{ color: '#64748b', margin: 0, fontSize: '1.1rem', fontWeight: '500' }}>
             {loading ? 'Waking up your list...' : tasks.length > 0

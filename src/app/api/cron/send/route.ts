@@ -28,9 +28,6 @@ export async function GET() {
     // @ts-ignore
     const eligibleUsers = users;
 
-    // GENERATE AI QUOTE ONCE FOR ALL USERS
-    const aiQuote = await generateMorningQuote();
-
     // Process in parallel batches of 10
     const BATCH_SIZE = 10;
     for (let i = 0; i < eligibleUsers.length; i += BATCH_SIZE) {
@@ -42,6 +39,11 @@ export async function GET() {
             where: { userId: user.id, dateFor: today },
             orderBy: { createdAt: 'asc' },
           });
+
+          const taskContents = tasks.map((t: { content: string }) => t.content);
+
+          // GENERATE PERSONALIZED AI QUOTE FOR THIS SPECIFIC USER
+          const aiQuote = await generateMorningQuote(user.name || undefined, taskContents);
 
           const tasksItems = tasks.map((t: { content: string }, idx: number) => {
             return `
@@ -98,8 +100,15 @@ export async function GET() {
                       <div style="display: inline-block; background: white; padding: 12px; border-radius: 20px; border: 2px solid rgba(255,255,255,0.8); box-shadow: 0 8px 24px rgba(45,27,46,0.05); margin-bottom: 20px;">
                         <img src="${SITE_URL}/planny-logo.png" alt="Planny" style="width: 48px; height: 48px; object-fit: contain; display: block;" />
                       </div>
+                      <div style="display: inline-block; background: white; padding: 12px; border-radius: 20px; border: 2px solid rgba(255,255,255,0.8); box-shadow: 0 8px 24px rgba(45,27,46,0.05); margin-bottom: 20px;">
+                        <img src="${SITE_URL}/planny-logo.png" alt="Planny" style="width: 48px; height: 48px; object-fit: contain; display: block;" />
+                      </div>
                       <h1 style="color: #2d1b2e; margin: 0 0 12px; font-size: 28px; font-weight: 800; letter-spacing: -0.02em;">Good morning, ${firstName}! ☀️</h1>
-                      <p style="color: #db2777; margin: 0; font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; background: rgba(255,255,255,0.8); display: inline-block; padding: 6px 14px; border-radius: 12px; box-shadow: 0 2px 8px rgba(219,39,119,0.05);">${todayDateStr}</p>
+                      
+                      <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                        <span style="color: #db2777; font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; background: rgba(255,255,255,0.8); padding: 6px 14px; border-radius: 12px; box-shadow: 0 2px 8px rgba(219,39,119,0.05);">${todayDateStr}</span>
+                        ${(user as any).currentStreak && (user as any).currentStreak > 0 ? `<span style="color: #e11d48; font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; background: #ffe4e6; padding: 6px 14px; border-radius: 12px; border: 1px solid #fda4af; box-shadow: 0 2px 8px rgba(244,63,94,0.15);">🔥 STREAK: ${(user as any).currentStreak} DAYS</span>` : ''}
+                      </div>
                     </div>
                     
                     <div class="content" style="padding: 32px 24px;">
