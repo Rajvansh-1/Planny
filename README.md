@@ -20,7 +20,9 @@
 Planny is an **AI-powered daily planning SaaS** that works entirely through your inbox.
 
 - 🌙 **Every night at 10 PM** — Planny emails you to check off today's tasks and plan what you want to achieve tomorrow.
-- ☀️ **Every morning at 7 AM** — Wake up to a beautiful digest: your task list + a fresh AI-generated motivational quote.
+- ☀️ **Every morning at 7 AM** — Wake up to a personalized digest: your task list + a highly specific AI-generated motivational quote based on *your* actual tasks.
+- 📊 **Every Sunday at 2 PM** — Get your "Weekly Wrap-Up" showing your completion rate and a brutally honest AI review (praise or roast!) of your performance.
+- 🔥 **Addictive Streaks** — Complete tasks daily to build and maintain your streak, displayed proudly on your dashboard and morning emails.
 
 No complicated dashboard. No app to open. Just smart, automated planning that feels like magic. 🌸
 
@@ -33,10 +35,12 @@ No complicated dashboard. No app to open. Just smart, automated planning that fe
 | | Feature | What it does |
 |---|---|---|
 | 🌙 | **Evening Check-in** | 10 PM email with tap-to-complete task checkboxes |
-| ☀️ | **Morning Digest** | AI-generated quote + your task list for the day |
+| ☀️ | **Morning Digest** | Personalized AI quote based on your tasks + your task list for the day |
+| 📊 | **Weekly Wrap-Up** | Sunday AI productivity report with success rate and personalized roast/praise |
+| 🔥 | **Addictive Streaks** | Build daily momentum with an animated streak counter |
 | 📅 | **Interactive Calendar** | Click any date to view, add, or check off tasks |
 | ✅ | **Email Checkbox Toggle** | Mark tasks done directly from your inbox |
-| 🤖 | **Groq AI Engine** | Llama 3-powered quotes and personalized messages |
+| 🤖 | **Groq AI Engine** | Llama 3-powered custom quotes and weekly performance reviews |
 | 🔐 | **Google Sign-In** | One-click OAuth — no passwords |
 | 💳 | **Razorpay Payments** | Smooth trial-to-paid subscription flow |
 | 📱 | **PWA-Ready** | Add to Home Screen — works on slow connections |
@@ -74,10 +78,14 @@ User signs up with Google → 20-day free trial starts
   User plans tomorrow via web or calendar
          ↓
   [7 AM — Morning Digest]
-  Groq AI generates a motivational quote
-  Planny sends a beautiful digest with today's task list 🌅
+  Groq AI analyzes your tasks to generate a highly personalized motivational quote
+  Planny sends a beautiful digest with today's task list + your current 🔥 Streak 🌅
          ↓
-  User opens calendar → add & check off tasks for any date
+  User checks off tasks from email → Streak Increases! 🔥
+         ↓
+  [Sunday 2 PM — Weekly Wrap-Up]
+  Planny calculates your weekly success rate
+  AI writes a custom review of your week (praise or roast!) 📊
 ```
 
 ---
