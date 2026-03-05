@@ -74,9 +74,9 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Redirect back to the plan page so user sees their updated list
+    // Redirect back to the calendar so user sees their updated list for that day
     return NextResponse.redirect(
-      `${SITE_URL}/plan?email=${encodeURIComponent(email)}&toggled=1`
+      `${SITE_URL}/calendar?email=${encodeURIComponent(email)}&date=${task.dateFor}&toggled=1`
     );
   } catch (error) {
     console.error('Toggle task error:', error);

@@ -25,9 +25,13 @@ export default function CalendarClient({ tasks: initialTasks, email }: { tasks: 
 
   // Try to parse ?date=YYYY-MM-DD from URL, fallback to today
   const initialDateStr = searchParams.get('date');
-  const initialDate = initialDateStr && !isNaN(Date.parse(initialDateStr))
-    ? new Date(initialDateStr)
-    : new Date();
+  let initialDate = new Date();
+  if (initialDateStr && /^\d{4}-\d{2}-\d{2}$/.test(initialDateStr)) {
+    const [y, m, d] = initialDateStr.split('-').map(Number);
+    initialDate = new Date(y, m - 1, d);
+  } else if (initialDateStr && !isNaN(Date.parse(initialDateStr))) {
+    initialDate = new Date(initialDateStr);
+  }
 
   const [currentMonth, setCurrentMonth] = useState(initialDate);
   const [selectedDate, setSelectedDate] = useState(initialDate);

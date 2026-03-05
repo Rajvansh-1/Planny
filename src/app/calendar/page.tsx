@@ -6,15 +6,23 @@ import CalendarClientWrapper from "@/components/CalendarClientWrapper";
 
 export const dynamic = 'force-dynamic';
 
-export default async function CalendarPage() {
-  const session = await getServerSession(authOptions);
+type Props = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
 
-  if (!session?.user?.email) {
+export default async function CalendarPage({ searchParams }: Props) {
+  const session = await getServerSession(authOptions);
+  const params = await searchParams;
+  const emailParam = params.email as string | undefined;
+
+  const email = session?.user?.email || emailParam;
+
+  if (!email) {
     redirect("/");
   }
 
   const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
+    where: { email },
     include: {
       tasks: {
         orderBy: { createdAt: 'desc' }
@@ -34,5 +42,5 @@ export default async function CalendarPage() {
     completed: t.completed,
   }));
 
-  return <CalendarClientWrapper tasks={safeTasks} email={session.user.email!} />;
+  return <CalendarClientWrapper tasks={safeTasks} email={email} />;
 }
