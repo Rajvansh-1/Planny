@@ -10,7 +10,7 @@ import {
   ChevronLeft, ChevronRight, CheckCircle2, Circle,
   ArrowLeft, Loader2, Plus, Sparkles, CalendarDays, Trash2, Pencil,
 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 type Task = {
   id: string;
@@ -21,9 +21,16 @@ type Task = {
 
 export default function CalendarClient({ tasks: initialTasks, email }: { tasks: Task[]; email: string }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  // Try to parse ?date=YYYY-MM-DD from URL, fallback to today
+  const initialDateStr = searchParams.get('date');
+  const initialDate = initialDateStr && !isNaN(Date.parse(initialDateStr))
+    ? new Date(initialDateStr)
+    : new Date();
+
+  const [currentMonth, setCurrentMonth] = useState(initialDate);
+  const [selectedDate, setSelectedDate] = useState(initialDate);
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [loadingTasks, setLoadingTasks] = useState<string[]>([]);
   const [isNavigating, setIsNavigating] = useState(false);

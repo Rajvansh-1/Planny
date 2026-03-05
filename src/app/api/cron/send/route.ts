@@ -67,7 +67,7 @@ export async function GET() {
               </div>
             `;
 
-          const planUrl = `${SITE_URL}/calendar?email=${encodeURIComponent(user.email)}`;
+          const planUrl = `${SITE_URL}/calendar?email=${encodeURIComponent(user.email)}&date=${today}`;
           const firstName = user.name?.split(' ')[0] || 'friend';
           const todayDateStr = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
           const subjectDateStr = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
