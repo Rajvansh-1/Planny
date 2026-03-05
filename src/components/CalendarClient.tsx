@@ -8,7 +8,7 @@ import {
 } from 'date-fns';
 import {
   ChevronLeft, ChevronRight, CheckCircle2, Circle,
-  ArrowLeft, Loader2, Plus, Sparkles, CalendarDays, Trash2,
+  ArrowLeft, Loader2, Plus, Sparkles, CalendarDays, Trash2, Pencil,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -29,6 +29,9 @@ export default function CalendarClient({ tasks: initialTasks, email }: { tasks: 
   const [isNavigating, setIsNavigating] = useState(false);
   const [newTaskInput, setNewTaskInput] = useState('');
   const [isAddingTask, setIsAddingTask] = useState(false);
+  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
+  const [editTaskContent, setEditTaskContent] = useState('');
+  const [isSavingEdit, setIsSavingEdit] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -94,15 +97,44 @@ export default function CalendarClient({ tasks: initialTasks, email }: { tasks: 
     const newCompleted = !task.completed;
     setTasks(prev => prev.map(t => t.id === task.id ? { ...t, completed: newCompleted } : t));
     try {
-      await fetch(`/api/tasks/${task.id}`, {
+      const res = await fetch(`/api/tasks`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ completed: newCompleted }),
+        body: JSON.stringify({ taskId: task.id, completed: newCompleted }),
       });
+      if (!res.ok) throw new Error('Failed to toggle');
     } catch {
       setTasks(prev => prev.map(t => t.id === task.id ? { ...t, completed: !newCompleted } : t));
     } finally {
       setLoadingTasks(prev => prev.filter(id => id !== task.id));
+    }
+  };
+
+  // ─── Edit task ───────────────────────────────────────────────────────────────
+  const handleEditSave = async (task: Task) => {
+    if (!editTaskContent.trim() || editTaskContent === task.content) {
+      setEditingTaskId(null);
+      return;
+    }
+
+    setIsSavingEdit(true);
+    const oldContent = task.content;
+    const newContent = editTaskContent.trim();
+
+    setTasks(prev => prev.map(t => t.id === task.id ? { ...t, content: newContent } : t));
+
+    try {
+      const res = await fetch('/api/tasks', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ taskId: task.id, content: newContent }),
+      });
+      if (!res.ok) throw new Error('Failed to edit');
+      setEditingTaskId(null);
+    } catch {
+      setTasks(prev => prev.map(t => t.id === task.id ? { ...t, content: oldContent } : t));
+    } finally {
+      setIsSavingEdit(false);
     }
   };
 
@@ -263,9 +295,45 @@ export default function CalendarClient({ tasks: initialTasks, email }: { tasks: 
                             ? <CheckCircle2 size={28} style={{ color: '#10b981' }} />
                             : <Circle size={28} style={{ color: '#94a3b8' }} />}
                       </button>
-                      <span style={{ flex: 1, color: task.completed ? '#cbd5e1' : 'var(--text-dark)', textDecoration: task.completed ? 'line-through' : 'none', fontSize: '1.1rem', fontWeight: '700', lineHeight: '1.4', wordBreak: 'break-word' }}>
-                        {task.content}
-                      </span>
+                      {editingTaskId === task.id ? (
+                        <div style={{ flex: 1, display: 'flex', gap: '8px' }}>
+                          <input
+                            autoFocus
+                            type="text"
+                            value={editTaskContent}
+                            onChange={e => setEditTaskContent(e.target.value)}
+                            onKeyDown={e => {
+                              if (e.key === 'Enter') handleEditSave(task);
+                              if (e.key === 'Escape') setEditingTaskId(null);
+                            }}
+                            disabled={isSavingEdit}
+                            style={{ flex: 1, padding: '8px 12px', borderRadius: '10px', border: '2px solid rgba(244,114,182,0.4)', background: 'rgba(255,255,255,0.8)', fontSize: '1.05rem', color: 'var(--text-dark)' }}
+                          />
+                          <button
+                            onClick={() => handleEditSave(task)}
+                            disabled={isSavingEdit || !editTaskContent.trim()}
+                            style={{ background: 'var(--accent)', color: 'white', border: 'none', borderRadius: '10px', padding: '0 12px', cursor: 'pointer', display: 'flex', alignItems: 'center', transition: 'all 0.2s', opacity: (!editTaskContent.trim() || isSavingEdit) ? 0.5 : 1 }}
+                          >
+                            {isSavingEdit ? <Loader2 size={18} className="spinner" /> : <CheckCircle2 size={18} />}
+                          </button>
+                        </div>
+                      ) : (
+                        <span style={{ flex: 1, color: task.completed ? '#cbd5e1' : 'var(--text-dark)', textDecoration: task.completed ? 'line-through' : 'none', fontSize: '1.1rem', fontWeight: '700', lineHeight: '1.4', wordBreak: 'break-word' }}>
+                          {task.content}
+                        </span>
+                      )}
+
+                      {editingTaskId !== task.id && (
+                        <button
+                          onClick={() => { setEditingTaskId(task.id); setEditTaskContent(task.content); }}
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', flexShrink: 0, lineHeight: 0, color: '#cbd5e1', transition: 'all 0.2s', borderRadius: '8px' }}
+                          onMouseOver={e => { e.currentTarget.style.color = '#3b82f6'; e.currentTarget.style.background = '#eff6ff'; }}
+                          onMouseOut={e => { e.currentTarget.style.color = '#cbd5e1'; e.currentTarget.style.background = 'none'; }}
+                          title="Edit task"
+                        >
+                          <Pencil size={18} />
+                        </button>
+                      )}
                       <button
                         onClick={() => handleDelete(task)}
                         style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', flexShrink: 0, lineHeight: 0, color: '#cbd5e1', transition: 'all 0.2s', borderRadius: '8px' }}
