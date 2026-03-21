@@ -20,13 +20,8 @@ export async function GET(req: Request) {
 
     if (!user) return NextResponse.json({ isPaid: false });
 
-    // 1-day free trial logic: if created within last 24 hours, user is implicitly "paid"
-    const oneDayAgo = new Date();
-    oneDayAgo.setDate(oneDayAgo.getDate() - 1);
-    const isWithinFreeTrial = user.createdAt > oneDayAgo;
-
     return NextResponse.json({
-      isPaid: true, // Beta version: Free for everyone for 20 days
+      isPaid: user.isPaid || isAdmin(email),
       currentStreak: user.currentStreak || 0
     });
   } catch (error) {

@@ -27,10 +27,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true, isPaid: true });
     }
 
-    // Disable payments if KYC is pending (keys are placeholders)
-    if (!process.env.RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID.includes('placeholder')) {
-      return NextResponse.json({ error: 'Payments are currently disabled pending verification. Please try again later.' }, { status: 503 });
-    }
 
     const razorpay = new Razorpay({
       key_id: process.env.RAZORPAY_KEY_ID,

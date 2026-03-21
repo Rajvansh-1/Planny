@@ -24,9 +24,9 @@ export async function GET() {
     let sent = 0;
     const errors: string[] = [];
 
-    // 20-Day Free Beta: All users are eligible
+    // Only paid users or admins get the daily check-ins
     // @ts-ignore
-    const eligibleUsers = users;
+    const eligibleUsers = users.filter((u: any) => u.isPaid || isAdmin(u.email));
 
     // Process in parallel batches of 10
     const BATCH_SIZE = 10;

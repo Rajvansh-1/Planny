@@ -10,6 +10,8 @@ type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
+import { isAdmin } from "@/lib/isAdmin";
+
 export default async function CalendarPage({ searchParams }: Props) {
   const session = await getServerSession(authOptions);
   const params = await searchParams;
@@ -32,6 +34,11 @@ export default async function CalendarPage({ searchParams }: Props) {
 
   if (!user) {
     redirect("/");
+  }
+
+  // @ts-ignore
+  if (!user.isPaid && !isAdmin(email)) {
+    redirect(`/payment?email=${encodeURIComponent(email)}`);
   }
 
   // Need to pass clean plain objects to Client Components

@@ -61,9 +61,6 @@ export default function Home() {
             `}</style>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
-            <span style={{ fontSize: '13px', background: 'linear-gradient(135deg, rgba(244,114,182,0.15), rgba(253,224,217,0.4))', border: '1px solid rgba(244,114,182,0.2)', color: 'var(--accent)', padding: '8px 20px', borderRadius: '40px', fontWeight: '800', letterSpacing: '0.05em', boxShadow: 'var(--shadow-sm)' }}>✨ BETA ACCESS</span>
-          </div>
 
           <h1 className="text-glow" style={{ fontSize: '3.2rem', margin: '0 0 16px', lineHeight: '1.1', display: 'flex', flexDirection: 'column', alignItems: 'center', fontWeight: '800', letterSpacing: '-0.04em' }}>
             <span>Meet Planny</span>
@@ -211,7 +208,7 @@ export default function Home() {
                 <span>Subscribe to Planny Pro to hit your peak productivity</span>
               </div>
               <p style={{ color: '#64748b', fontSize: '15px', fontWeight: '600' }}>
-                20 Days Free • Then just <span style={{ color: 'var(--accent)', fontWeight: '800', fontSize: '17px' }}>₹19/month</span>
+                Join Planny Pro today for just <span style={{ color: 'var(--accent)', fontWeight: '800', fontSize: '17px' }}>₹19/month</span>
               </p>
             </div>
           )}
