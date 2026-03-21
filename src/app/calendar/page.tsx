@@ -11,6 +11,7 @@ type Props = {
 };
 
 import { isAdmin } from "@/lib/isAdmin";
+import { hasAccess } from "@/lib/subscription";
 
 export default async function CalendarPage({ searchParams }: Props) {
   const session = await getServerSession(authOptions);
@@ -37,7 +38,7 @@ export default async function CalendarPage({ searchParams }: Props) {
   }
 
   // @ts-ignore
-  if (!user.isPaid && !isAdmin(email)) {
+  if (!hasAccess(user as any)) {
     redirect(`/payment?email=${encodeURIComponent(email)}`);
   }
 

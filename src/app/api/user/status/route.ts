@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { isAdmin } from '@/lib/isAdmin';
+import { hasAccess } from '@/lib/subscription';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,11 +18,10 @@ export async function GET(req: Request) {
       // @ts-ignore
       select: { isPaid: true, createdAt: true, currentStreak: true }
     });
-
-    if (!user) return NextResponse.json({ isPaid: false });
+        if (!user) return NextResponse.json({ isPaid: false });
 
     return NextResponse.json({
-      isPaid: user.isPaid || isAdmin(email),
+      isPaid: hasAccess(user as any),
       currentStreak: user.currentStreak || 0
     });
   } catch (error) {

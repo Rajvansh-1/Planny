@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma';
 import { sendEmail } from '@/lib/email';
 import Groq from 'groq-sdk';
 import { isAdmin } from '@/lib/isAdmin';
+import { hasAccess } from '@/lib/subscription';
 import { generateMorningQuote } from '@/lib/ai';
 
 export const dynamic = 'force-dynamic';
@@ -15,7 +16,7 @@ export async function GET() {
     // @ts-ignore
     const users = await prisma.user.findMany({
       // @ts-ignore
-      select: { id: true, email: true, name: true, isPaid: true }
+      select: { id: true, email: true, name: true, isPaid: true, createdAt: true }
     });
 
     // Today's date
@@ -24,9 +25,9 @@ export async function GET() {
     let sent = 0;
     const errors: string[] = [];
 
-    // Only paid users or admins get the daily check-ins
+    // Only paid users, admins, or users in 1-day trial get check-ins
     // @ts-ignore
-    const eligibleUsers = users.filter((u: any) => u.isPaid || isAdmin(u.email));
+    const eligibleUsers = users.filter((u: any) => hasAccess(u));
 
     // Process in parallel batches of 10
     const BATCH_SIZE = 10;
